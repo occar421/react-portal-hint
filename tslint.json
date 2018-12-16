@@ -5,6 +5,7 @@
     "prettier": true,
     "no-implicit-dependencies": {
       "options": "dev"
-    }
+    },
+    "object-literal-sort-keys": false
   }
 }
