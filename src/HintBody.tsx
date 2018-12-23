@@ -8,6 +8,10 @@ interface IProperty {
   rect: Readonly<ClientRect>;
   place: Place;
   shows: boolean;
+  bodyClass: string;
+  shownClass: string;
+  hiddenClass: string;
+  useTransition: boolean;
   onDisappeared?(): void;
 }
 
@@ -41,7 +45,10 @@ class HintBody extends React.Component<IProperty, State> {
   }
 
   public render() {
-    let styles: React.CSSProperties = {};
+    let styles: React.CSSProperties = {
+      display: "inline-flex",
+      position: "absolute"
+    };
     if (this.state.contentRect) {
       if (this.props.place === "top") {
         const targetHorizontalCenter =
@@ -62,15 +69,16 @@ class HintBody extends React.Component<IProperty, State> {
 
     return ReactDOM.createPortal(
       <div
-        style={{
-          display: "inline-block",
-          position: "fixed",
-          transition: "opacity 0.5s ease-out",
-          opacity: this.props.shows && this.state.onceRendered ? 1 : 0,
-          ...styles
-        }}
         ref={this.ref}
+        style={styles}
         onTransitionEnd={this.onTransitionEnd}
+        className={[
+          this.props.bodyClass,
+          this.props.shows &&
+          (!this.props.useTransition || this.state.onceRendered)
+            ? this.props.shownClass
+            : this.props.hiddenClass
+        ].join(" ")}
       >
         {this.props.children}
       </div>,
@@ -79,7 +87,11 @@ class HintBody extends React.Component<IProperty, State> {
   }
 
   private onTransitionEnd = () => {
-    if (!this.props.shows && this.props.onDisappeared) {
+    if (
+      this.props.useTransition &&
+      !this.props.shows &&
+      this.props.onDisappeared
+    ) {
       this.props.onDisappeared();
     }
   };

@@ -4,6 +4,8 @@ import { Place } from "./models";
 
 interface IProperty {
   place: Place;
+  bodyClass: string;
+  useTransition: boolean;
   content: JSX.Element | string | ((rect: ClientRect) => JSX.Element | string);
 }
 
@@ -15,7 +17,14 @@ const initialState = {
 type State = Readonly<typeof initialState>;
 
 class ReactPortalHint extends React.Component<IProperty, State> {
-  public static defaultProps: Pick<IProperty, "place"> = { place: "top" };
+  public static defaultProps: Pick<
+    IProperty,
+    "place" | "bodyClass" | "useTransition"
+  > = {
+    place: "top",
+    bodyClass: "react-portal-hint__body",
+    useTransition: true
+  };
   public readonly state: State = initialState;
   private ref = React.createRef<HTMLDivElement>();
 
@@ -28,7 +37,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     return (
       <>
         <div
-          style={{ display: "inline-block" }}
+          style={{ display: "inline-flex" }}
           ref={this.ref}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -40,6 +49,10 @@ class ReactPortalHint extends React.Component<IProperty, State> {
             rect={this.state.rect}
             place={this.props.place}
             shows={this.state.showsBody}
+            bodyClass={this.props.bodyClass}
+            shownClass={"shown"}
+            hiddenClass={"hidden"}
+            useTransition={this.props.useTransition === true}
             onDisappeared={this.onDisappeared}
           >
             {typeof this.props.content === "function"

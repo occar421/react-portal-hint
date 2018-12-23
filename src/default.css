@@ -1,0 +1,47 @@
+.react-portal-hint__body {
+  color: #ffffff;
+  background-color: #383838;
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  transform: translateY(-4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.5s ease-out;
+  z-index: 1;
+}
+
+.react-portal-hint__body:before {
+  content: "";
+  height: 4px;
+  width: 4px;
+  position: absolute;
+  z-index: -1;
+  transform: translate(-100%) rotate(45deg);
+  transform-origin: right bottom;
+  box-shadow: 1.4142px 1.4142px 4px rgba(0, 0, 0, 0.3);
+  bottom: -4px;
+  left: 50%;
+}
+
+.react-portal-hint__body:after {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  z-index: 1;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #383838;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+}
+
+.react-portal-hint__body.shown {
+  opacity: 1;
+}
+
+.react-portal-hint__body.hidden {
+  opacity: 0;
+}

@@ -3,6 +3,8 @@ import { storiesOf } from "@storybook/react";
 import * as React from "react";
 import Hint from "../src";
 
+import "../src/default.css";
+
 storiesOf("Default", module)
   .add("for button", () => (
     <div style={{ padding: "100px" }}>
