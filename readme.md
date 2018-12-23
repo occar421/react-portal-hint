@@ -2,7 +2,12 @@
 
 This library is experimental phase. Everything is subject to change.
 
-Tooltip/Popover which exploits React Portals. Parallel fading is enabled.
+Tooltip/Popover which exploits React Portals. Parallel fading is enabled.  
+[Demo](https://react-portal-hint-demo.netlify.com/)
+
+[![CircleCI](https://circleci.com/gh/occar421/react-portal-hint.svg?style=svg)](https://circleci.com/gh/occar421/react-portal-hint)
+[![npm version](https://img.shields.io/npm/v/react-portal-hint.svg)](https://www.npmjs.com/package/react-portal-hint)
+[![license](https://img.shields.io/github/license/occar421/react-portal-hint.svg)](https://choosealicense.com/licenses/)
 
 ## TODO
 
