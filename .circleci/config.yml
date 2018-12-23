@@ -1,10 +1,13 @@
 version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+
 jobs:
   build:
-    docker:
-      - image: circleci/node:10
-
-    working_directory: ~/repo
+    <<: *defaults
 
     steps:
       - checkout
@@ -28,3 +31,26 @@ jobs:
       - run: yarn build
       # run tests!
       # - run: yarn test
+
+  deploy:
+    <<: *defaults
+
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: echo "registry=https://registry.npmjs.org/" > ~/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+      - run: npm publish
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
