@@ -82,3 +82,4 @@ typings/
 dist/
 
 .rts2_cache
+storybook-static/

@@ -10,7 +10,8 @@
   "scripts": {
     "build": "rollup -c",
     "lint": "tslint -p tsconfig.json",
-    "storybook": "start-storybook -p 9001 -c .storybook"
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
     "@storybook/react": "^4.1.1",

@@ -11,3 +11,4 @@ stories/
 yarn.lock
 tsconfig.json
 *.tgz
+storybook-static/
