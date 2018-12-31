@@ -1,4 +1,5 @@
 import * as React from "react";
+import { set as setBaseElement } from "./baseHelper";
 import HintBody from "./HintBody";
 import { Place } from "./models";
 
@@ -25,6 +26,9 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     bodyClass: "react-portal-hint__body",
     useTransition: true
   };
+  public static setBaseElement(element: string | HTMLElement) {
+    setBaseElement(element);
+  }
   public readonly state: State = initialState;
   private ref = React.createRef<HTMLDivElement>();
 

@@ -9,6 +9,8 @@ const buttonStyle: React.CSSProperties = {
   width: "100%"
 };
 
+// Hint.setBaseElement("#root"); if you need
+
 storiesOf("Default", module)
   .add("for button", () => (
     <div

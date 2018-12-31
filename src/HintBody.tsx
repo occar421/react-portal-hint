@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { get as getBaseElement } from "./baseHelper";
 import { Place } from "./models";
-
-export const modalRoot = document.querySelector("body");
 
 interface IProperty {
   rect: Readonly<ClientRect>;
@@ -26,22 +25,24 @@ class HintBody extends React.Component<IProperty, State> {
 
   private el = document.createElement("div");
   private ref = React.createRef<HTMLDivElement>();
+  private modalRoot = null;
 
   constructor(props) {
     super(props);
 
     this.el.setAttribute("style", "display: inline-block; float: left");
+    this.modalRoot = getBaseElement();
   }
 
   public componentDidMount() {
-    modalRoot.appendChild(this.el);
+    this.modalRoot.appendChild(this.el);
 
     const rect = this.ref.current!.getBoundingClientRect();
     this.setState({ contentRect: rect, onceRendered: true });
   }
 
   public componentWillUnmount() {
-    modalRoot.removeChild(this.el);
+    this.modalRoot.removeChild(this.el);
   }
 
   public render() {
