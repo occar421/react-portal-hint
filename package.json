@@ -21,7 +21,7 @@
     "@types/storybook__react": "^4.0.0",
     "prettier": "^1.15.3",
     "react-docgen-typescript-loader": "^3.0.0",
-    "rollup": "^0.67.4",
+    "rollup": "^1.0.0",
     "rollup-plugin-copy-glob": "^0.2.2",
     "rollup-plugin-typescript2": "^0.18.1",
     "ts-loader": "^5.3.1",
