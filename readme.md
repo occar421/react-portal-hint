@@ -11,12 +11,10 @@ Tooltip/Popover which exploits React Portals. Parallel fading is enabled.
 
 ## TODO
 
-- [ ] Support place options
-  - [x] top
-  - [x] bottom
-  - [ ] left
-  - [ ] right
-- [ ] Chore (rollup 1.0, use node-sass watch)
+- [x] Implement default style
+- [x] Implement port for user-defined style
+- [x] Support place options (top, button, left, right)
+- [x] Chore (rollup 1.0, use node-sass watch)
 - [ ] Make portal root element configurable
 - [ ] Follow target or hint content size or position (Use ResizeObserver?)
 - [ ] Support more place options (combinations)
