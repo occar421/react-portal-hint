@@ -5,10 +5,9 @@
   line-height: 0.8rem;
   padding: 0.3rem;
   border-radius: 0.3rem;
-  transform: translateY(-4px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: opacity 0.5s ease-out;
   z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .react-portal-hint__body:before {
@@ -17,11 +16,6 @@
   width: 4px;
   position: absolute;
   z-index: -1;
-  transform: translate(-100%) rotate(45deg);
-  transform-origin: right bottom;
-  box-shadow: 1.4142px 1.4142px 4px rgba(0, 0, 0, 0.3);
-  bottom: -4px;
-  left: 50%;
 }
 
 .react-portal-hint__body:after {
@@ -30,12 +24,6 @@
   height: 0;
   position: absolute;
   z-index: 1;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #383838;
-  left: 50%;
-  bottom: -4px;
-  transform: translateX(-50%);
 }
 
 .react-portal-hint__body.shown {
@@ -44,4 +32,44 @@
 
 .react-portal-hint__body.hidden {
   opacity: 0;
+}
+
+/* for top */
+.react-portal-hint__body.top {
+  transform: translateY(-4px);
+}
+
+.react-portal-hint__body.top:before {
+  transform: translate(-100%) rotate(45deg);
+  transform-origin: right bottom;
+  box-shadow: 1.4142px 1.4142px 4px rgba(0, 0, 0, 0.3);
+  height: 6px;
+  width: 6px;
+  bottom: -4px;
+  left: 50%;
+}
+
+.react-portal-hint__body.top:after {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #383838;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+}
+
+/* for bottom */
+.react-portal-hint__body.bottom {
+  transform: translateY(4px);
+}
+
+/* shadow is hidden by the content */
+
+.react-portal-hint__body.bottom:after {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #383838;
+  left: 50%;
+  top: -4px;
+  transform: translateX(-50%);
 }

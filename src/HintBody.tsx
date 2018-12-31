@@ -30,7 +30,7 @@ class HintBody extends React.Component<IProperty, State> {
   constructor(props) {
     super(props);
 
-    this.el.setAttribute("style", "display: inline-block;");
+    this.el.setAttribute("style", "display: inline-block; float: left");
   }
 
   public componentDidMount() {
@@ -64,8 +64,23 @@ class HintBody extends React.Component<IProperty, State> {
           left: `${targetHorizontalCenter - contentWidth / 2}px`,
           top: `${targetTop - contentHeight}px`
         };
+      } else if (this.props.place === "bottom") {
+        const targetBottom = this.props.rect.bottom;
+        const targetHorizontalCenter =
+          (this.props.rect.left + this.props.rect.right) / 2;
+
+        const contentWidth = this.state.contentRect.width;
+
+        // FIXME: strangely, it is not align center...
+        styles = {
+          ...styles,
+          left: `${targetHorizontalCenter - contentWidth / 2}px`,
+          top: `${targetBottom}px`
+        };
       }
     }
+
+    const placeClass: string = this.props.place; // temporary
 
     return ReactDOM.createPortal(
       <div
@@ -77,7 +92,8 @@ class HintBody extends React.Component<IProperty, State> {
           this.props.shows &&
           (!this.props.useTransition || this.state.onceRendered)
             ? this.props.shownClass
-            : this.props.hiddenClass
+            : this.props.hiddenClass,
+          placeClass
         ].join(" ")}
       >
         {this.props.children}

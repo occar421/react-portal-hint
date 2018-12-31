@@ -1,18 +1,29 @@
 /* tslint:disable:jsx-no-lambda */
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
-import Hint from "../src";
+import Hint from "../src/index";
 
 import "../src/default.css";
 
+const buttonStyle: React.CSSProperties = {
+  width: "100%"
+};
+
 storiesOf("Default", module)
   .add("for button", () => (
-    <div style={{ padding: "100px" }}>
-      <Hint content="This is tooltip.">
-        <button>Target</button>
+    <div
+      style={{
+        display: "grid",
+        gridGap: "5px",
+        gridTemplateColumns: "repeat(4, 70px)",
+        padding: "50px"
+      }}
+    >
+      <Hint content="This is tooltip." place="top">
+        <button style={buttonStyle}>Top</button>
       </Hint>
-      <Hint content="This is tooltip.">
-        <button>Target</button>
+      <Hint content="This is tooltip." place="bottom">
+        <button style={buttonStyle}>Bottom</button>
       </Hint>
     </div>
   ))
