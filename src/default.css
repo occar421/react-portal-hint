@@ -73,3 +73,27 @@
   top: -4px;
   transform: translateX(-50%);
 }
+
+/* for left */
+.react-portal-hint__body.left {
+  transform: translateX(-4px);
+}
+
+.react-portal-hint__body.left:before {
+  transform: translate(-100%) rotate(45deg);
+  transform-origin: right bottom;
+  box-shadow: 1.4142px 1.4142px 4px rgba(0, 0, 0, 0.3);
+  height: 4px;
+  width: 4px;
+  right: -4px;
+  top: 50%;
+}
+
+.react-portal-hint__body.left:after {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-left: 4px solid #383838;
+  top: 50%;
+  right: -4px;
+  transform: translateY(-50%);
+}
