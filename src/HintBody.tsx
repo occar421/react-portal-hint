@@ -90,6 +90,18 @@ class HintBody extends React.Component<IProperty, State> {
           left: `${targetLeft - contentWidth}px`,
           top: `${targetVerticalCenter - contentHeight / 2}px`
         };
+      } else if (this.props.place === "right") {
+        const targetRight = this.props.rect.right;
+        const targetVerticalCenter =
+          (this.props.rect.top + this.props.rect.bottom) / 2;
+
+        const contentHeight = this.props.rect.height;
+
+        styles = {
+          ...styles,
+          left: `${targetRight}px`,
+          top: `${targetVerticalCenter - contentHeight / 2}px`
+        };
       }
     }
 

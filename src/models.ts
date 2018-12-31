@@ -1,1 +1,1 @@
-export type Place = "top" | "bottom" | "left";
+export type Place = "top" | "bottom" | "left" | "right";

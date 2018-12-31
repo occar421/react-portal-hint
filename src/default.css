@@ -97,3 +97,27 @@
   right: -4px;
   transform: translateY(-50%);
 }
+
+/* for right */
+.react-portal-hint__body.right {
+  transform: translateX(4px);
+}
+
+.react-portal-hint__body.right:before {
+  transform: translate(-100%) rotate(45deg);
+  transform-origin: right bottom;
+  box-shadow: 1.4142px 1.4142px 4px rgba(0, 0, 0, 0.3);
+  height: 4px;
+  width: 4px;
+  left: 0;
+  top: 50%;
+}
+
+.react-portal-hint__body.right:after {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-right: 4px solid #383838;
+  top: 50%;
+  left: -4px;
+  transform: translateY(-50%);
+}
