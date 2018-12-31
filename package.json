@@ -8,7 +8,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
+    "build": "node-sass ./src/ -o src/ && rollup -c",
+    "style-watch": "node-sass ./src/ -o src/ && node-sass ./src/ -o src/ --watch",
     "lint": "tslint -p tsconfig.json",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "build-storybook -c .storybook"
@@ -19,6 +20,7 @@
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
     "@types/storybook__react": "^4.0.0",
+    "node-sass": "^4.11.0",
     "prettier": "^1.15.3",
     "react-docgen-typescript-loader": "^3.0.0",
     "rollup": "^1.0.0",

@@ -83,3 +83,4 @@ dist/
 
 .rts2_cache
 storybook-static/
+src/**/*.css
