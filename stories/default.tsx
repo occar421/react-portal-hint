@@ -15,16 +15,28 @@ storiesOf("Default", module)
       style={{
         display: "grid",
         gridGap: "5px",
-        gridTemplateColumns: "repeat(4, 70px)",
-        padding: "50px"
+        gridTemplateColumns: "repeat(3, 70px)",
+        paddingTop: "50px",
+        paddingLeft: "100px"
       }}
     >
+      <div />
       <Hint content="This is tooltip." place="top">
         <button style={buttonStyle}>Top</button>
       </Hint>
+      <div />
+      <Hint content="This is tooltip." place="left">
+        <button style={buttonStyle}>Left</button>
+      </Hint>
+      <div />
+      <Hint content="This is tooltip." place="right">
+        <button style={buttonStyle}>Right</button>
+      </Hint>
+      <div />
       <Hint content="This is tooltip." place="bottom">
         <button style={buttonStyle}>Bottom</button>
       </Hint>
+      <div />
     </div>
   ))
   .add("for text", () => (
