@@ -65,6 +65,8 @@ class ReactPortalHint extends React.Component<IProperty, State> {
           ref={this.ref}
           onClick={this.onClick}
           onDoubleClick={this.onDoubleClick}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
@@ -107,6 +109,18 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       } else {
         this.show();
       }
+    }
+  };
+
+  private onFocus = () => {
+    if (this.props.events.includes("focus")) {
+      this.show();
+    }
+  };
+
+  private onBlur = () => {
+    if (this.props.events.includes("focus")) {
+      this.hide();
     }
   };
 

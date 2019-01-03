@@ -171,6 +171,9 @@ storiesOf("Default", module)
         <Hint content="Tooltip" events={["double-click"]}>
           <button>Double-Click Toggle</button>
         </Hint>
+        <Hint content="Tooltip" events={["focus"]}>
+          <button>Focus</button>
+        </Hint>
       </div>
     </>
   ));
