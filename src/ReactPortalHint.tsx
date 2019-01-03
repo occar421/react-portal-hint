@@ -28,7 +28,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     place: "top",
     bodyClass: "react-portal-hint__body",
     useTransition: true,
-    events: ["mouse"]
+    events: ["mouse-hover"]
   };
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
@@ -63,6 +63,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
         <div
           style={{ display: "inline-flex" }}
           ref={this.ref}
+          onClick={this.onClick}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
@@ -88,14 +89,24 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     );
   }
 
+  private onClick = () => {
+    if (this.props.events.includes("click")) {
+      if (this.state.showsBody) {
+        this.hide();
+      } else {
+        this.show();
+      }
+    }
+  };
+
   private onMouseEnter = () => {
-    if (this.props.events.includes("mouse")) {
+    if (this.props.events.includes("mouse-hover")) {
       this.show();
     }
   };
 
   private onMouseLeave = () => {
-    if (this.props.events.includes("mouse")) {
+    if (this.props.events.includes("mouse-hover")) {
       this.hide();
     }
   };
