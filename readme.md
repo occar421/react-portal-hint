@@ -17,7 +17,7 @@ Tooltip/Popover which exploits React Portals & ResizeObserver. Parallel fading i
 - [x] Chore (rollup 1.0, use node-sass watch)
 - [x] Make portal root element configurable
 - [x] Follow target or hint content size or position (Use ResizeObserver?)
-- [ ] Support more events
+- [x] Support more events
 - [ ] Support more place options (combinations)
 - [ ] Resolve margin problem
 - [ ] Resolve CSS Grid problem

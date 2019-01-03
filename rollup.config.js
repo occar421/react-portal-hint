@@ -13,5 +13,5 @@ export default {
     }),
     copy([{ files: "src/*.css", dest: "dist" }])
   ],
-  external: ["react", "react-dom"]
+  external: ["react", "react-dom", "resize-observer-polyfill"]
 };
