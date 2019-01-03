@@ -31,7 +31,10 @@ class HintBody extends React.Component<IProperty, State> {
   private ro = new ResizeObserver(entries => {
     if (this.props.shows && entries && entries[0]) {
       // too problematic code. ResizeObserver's rect didn't work well
-      this.setState({ contentRect: this.ref.current!.getBoundingClientRect() });
+      this.setState({
+        contentRect: this.ref.current!.getBoundingClientRect(),
+        onceRendered: true
+      });
     }
   });
 
@@ -46,8 +49,6 @@ class HintBody extends React.Component<IProperty, State> {
     this.modalRoot.appendChild(this.el);
 
     this.ro.observe(this.ref.current!);
-
-    this.setState({ onceRendered: true });
   }
 
   public componentWillUnmount() {
