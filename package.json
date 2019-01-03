@@ -1,6 +1,6 @@
 {
   "name": "react-portal-hint",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Yet another implementation for Tooltip/Popover using React Portals.",
   "repository": "https://github.com/occar421/react-portal-hint",
   "author": "MasuqaT <occar@hotmail.co.jp>",
