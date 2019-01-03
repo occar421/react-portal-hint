@@ -1,9 +1,11 @@
 /* tslint:disable:jsx-no-lambda */
+import { select, withKnobs } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
 import Hint from "../src/index";
 
 import "../src/default.css";
+import { Place } from "../src/models";
 
 const buttonStyle: React.CSSProperties = {
   width: "100%"
@@ -11,7 +13,15 @@ const buttonStyle: React.CSSProperties = {
 
 // Hint.setBaseElement("#root"); if you need
 
+const knobOptions: { [s: string]: Place } = {
+  Top: "top",
+  Right: "right",
+  Bottom: "bottom",
+  Left: "left"
+};
+
 storiesOf("Default", module)
+  .addDecorator(withKnobs)
   .add("for button", () => (
     <div
       style={{
@@ -51,4 +61,96 @@ storiesOf("Default", module)
         eeee
       </span>
     </div>
-  ));
+  ))
+  .add("following animation", () => {
+    if (!document.getElementById("#following-animation")) {
+      const style = document.createElement("style");
+      // language=CSS
+      style.appendChild(
+        document.createTextNode(`
+@keyframes contraction-target {
+    0% {
+        width: 50px;
+        height: 50px;
+    }
+    25% {
+        width: 50px;
+        height: 100px;
+    }
+    50% {
+        width: 100px;
+        height: 100px;
+    }
+    75% {
+        width: 100px;
+        height: 50px;
+    }
+    100% {
+        width: 50px;
+        height: 50px;
+    }
+}
+@keyframes contraction-content {
+    0% {
+        width: 100px;
+        height: 20px;
+    }
+    25% {
+        width: 100px;
+        height: 30px;
+    }
+    50% {
+        width: 110px;
+        height: 30px;
+    }
+    75% {
+        width: 110px;
+        height: 20px;
+    }
+    100% {
+        width: 100px;
+        height: 20px;
+    }
+}
+.react-portal-hint__body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: contraction-content 1s linear 0s infinite;
+}
+      `)
+      );
+      style.setAttribute("id", "following-animation");
+      document.getElementsByTagName("head")[0].appendChild(style);
+    }
+
+    return (
+      <div style={{ padding: "100px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100px"
+          }}
+        >
+          <Hint
+            content="This is tooltip."
+            place={select("place", knobOptions, "top")}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "turquoise",
+                animation: "contraction-target 3s linear 0s infinite"
+              }}
+            >
+              🤓
+            </div>
+          </Hint>
+        </div>
+      </div>
+    );
+  });

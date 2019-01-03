@@ -1,4 +1,6 @@
 import * as React from "react";
+// @ts-ignore
+import ResizeObserver from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
 import HintBody from "./HintBody";
 import { Place } from "./models";
@@ -31,10 +33,20 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
   public readonly state: State = initialState;
   private ref = React.createRef<HTMLDivElement>();
+  private ro = new ResizeObserver(() => {
+    if (this.state.rendersBody) {
+      // too problematic code. ResizeObserver's rect didn't work well
+      this.setState({ rect: this.ref.current!.getBoundingClientRect() });
+    }
+  });
 
   public componentDidMount() {
-    const rect = this.ref.current!.getBoundingClientRect();
-    this.setState({ rect });
+    this.setState({ rect: this.ref.current!.getBoundingClientRect() });
+    this.ro.observe(this.ref.current!);
+  }
+
+  public componentWillUnmount() {
+    this.ro.disconnect();
   }
 
   public render() {

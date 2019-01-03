@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+// @ts-ignore
+import ResizeObserver from "resize-observer-polyfill";
 import { get as getBaseElement } from "./baseHelper";
 import { Place } from "./models";
 
@@ -26,6 +28,12 @@ class HintBody extends React.Component<IProperty, State> {
   private el = document.createElement("div");
   private ref = React.createRef<HTMLDivElement>();
   private modalRoot = null;
+  private ro = new ResizeObserver(entries => {
+    if (this.props.shows && entries && entries[0]) {
+      // too problematic code. ResizeObserver's rect didn't work well
+      this.setState({ contentRect: this.ref.current!.getBoundingClientRect() });
+    }
+  });
 
   constructor(props) {
     super(props);
@@ -37,12 +45,15 @@ class HintBody extends React.Component<IProperty, State> {
   public componentDidMount() {
     this.modalRoot.appendChild(this.el);
 
-    const rect = this.ref.current!.getBoundingClientRect();
-    this.setState({ contentRect: rect, onceRendered: true });
+    this.ro.observe(this.ref.current!);
+
+    this.setState({ onceRendered: true });
   }
 
   public componentWillUnmount() {
     this.modalRoot.removeChild(this.el);
+
+    this.ro.disconnect();
   }
 
   public render() {
