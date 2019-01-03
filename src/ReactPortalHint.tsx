@@ -3,12 +3,13 @@ import * as React from "react";
 import ResizeObserver from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
 import HintBody from "./HintBody";
-import { Place } from "./models";
+import { Event, Place } from "./models";
 
 interface IProperty {
   place: Place;
   bodyClass: string;
   useTransition: boolean;
+  events: Event[];
   content: JSX.Element | string | ((rect: ClientRect) => JSX.Element | string);
 }
 
@@ -22,11 +23,12 @@ type State = Readonly<typeof initialState>;
 class ReactPortalHint extends React.Component<IProperty, State> {
   public static defaultProps: Pick<
     IProperty,
-    "place" | "bodyClass" | "useTransition"
+    "place" | "bodyClass" | "useTransition" | "events"
   > = {
     place: "top",
     bodyClass: "react-portal-hint__body",
-    useTransition: true
+    useTransition: true,
+    events: ["mouse"]
   };
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
@@ -39,6 +41,12 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       this.setState({ rect: this.ref.current!.getBoundingClientRect() });
     }
   });
+  public readonly show = () => {
+    this.setState({ rendersBody: true, showsBody: true });
+  };
+  public readonly hide = () => {
+    this.setState({ showsBody: false });
+  };
 
   public componentDidMount() {
     this.setState({ rect: this.ref.current!.getBoundingClientRect() });
@@ -81,11 +89,15 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   private onMouseEnter = () => {
-    this.setState({ rendersBody: true, showsBody: true });
+    if (this.props.events.includes("mouse")) {
+      this.show();
+    }
   };
 
   private onMouseLeave = () => {
-    this.setState({ showsBody: false });
+    if (this.props.events.includes("mouse")) {
+      this.hide();
+    }
   };
 
   private onDisappeared = () => {
