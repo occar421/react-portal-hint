@@ -84,7 +84,7 @@ class HintBody extends React.Component<IProperty, State> {
           (this.props.rect.top + this.props.rect.bottom) / 2;
 
         const contentWidth = this.state.contentRect.width;
-        const contentHeight = this.props.rect.height;
+        const contentHeight = this.state.contentRect.height;
 
         styles = {
           ...styles,
@@ -96,7 +96,7 @@ class HintBody extends React.Component<IProperty, State> {
         const targetVerticalCenter =
           (this.props.rect.top + this.props.rect.bottom) / 2;
 
-        const contentHeight = this.props.rect.height;
+        const contentHeight = this.state.contentRect.height;
 
         styles = {
           ...styles,
