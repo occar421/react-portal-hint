@@ -155,15 +155,22 @@ storiesOf("Default", module)
     );
   })
   .add("events", () => (
-    <div style={{ padding: "20px" }}>
-      <Hint content="Tooltip">
-        <button>Mouse Hover (default)</button>
-      </Hint>
-      <Hint content="Tooltip" events={["click"]}>
-        <button>Click Toggle</button>
-      </Hint>
-      <Hint content="Tooltip" events={["mouse-hover", "click"]}>
-        <button>Mouse Hover & Click Toggle</button>
-      </Hint>
-    </div>
+    <>
+      <div style={{ padding: "20px" }}>
+        <Hint content="Tooltip">
+          <button>Mouse Hover (default)</button>
+        </Hint>
+        <Hint content="Tooltip" events={["click"]}>
+          <button>Click Toggle</button>
+        </Hint>
+        <Hint content="Tooltip" events={["mouse-hover", "click"]}>
+          <button>Mouse Hover & Click Toggle</button>
+        </Hint>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <Hint content="Tooltip" events={["double-click"]}>
+          <button>Double-Click Toggle</button>
+        </Hint>
+      </div>
+    </>
   ));

@@ -64,6 +64,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
           style={{ display: "inline-flex" }}
           ref={this.ref}
           onClick={this.onClick}
+          onDoubleClick={this.onDoubleClick}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
@@ -91,6 +92,16 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
   private onClick = () => {
     if (this.props.events.includes("click")) {
+      if (this.state.showsBody) {
+        this.hide();
+      } else {
+        this.show();
+      }
+    }
+  };
+
+  private onDoubleClick = () => {
+    if (this.props.events.includes("double-click")) {
       if (this.state.showsBody) {
         this.hide();
       } else {
