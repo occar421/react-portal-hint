@@ -20,50 +20,53 @@ const knobOptions: { [s: string]: Place } = {
   Left: "left"
 };
 
-storiesOf("Default", module)
-  .addDecorator(withKnobs)
-  .add("for button", () => (
-    <div
-      style={{
-        display: "grid",
-        gridGap: "5px",
-        gridTemplateColumns: "repeat(3, 70px)",
-        paddingTop: "50px",
-        paddingLeft: "100px"
-      }}
-    >
-      <div />
-      <Hint content="This is tooltip." place="top">
-        <button style={buttonStyle}>Top</button>
-      </Hint>
-      <div />
-      <Hint content="This is tooltip." place="left">
-        <button style={buttonStyle}>Left</button>
-      </Hint>
-      <div />
-      <Hint content="This is tooltip." place="right">
-        <button style={buttonStyle}>Right</button>
-      </Hint>
-      <div />
-      <Hint content="This is tooltip." place="bottom">
-        <button style={buttonStyle}>Bottom</button>
-      </Hint>
-      <div />
-    </div>
-  ))
-  .add("for text", () => (
-    <div style={{ padding: "100px" }}>
-      <span>
-        aaaa
-        <Hint content="This is tooltip.">bbbb</Hint>
-        cccc
-        <Hint content="This is tooltip.">ffff</Hint>
-        eeee
-      </span>
-    </div>
-  ))
-  .add("following animation", () => {
-    if (!document.getElementById("#following-animation")) {
+const stories = storiesOf("Default", module).addDecorator(withKnobs);
+
+stories.add("for button", () => (
+  <div
+    style={{
+      display: "grid",
+      gridGap: "5px",
+      gridTemplateColumns: "repeat(3, 70px)",
+      paddingTop: "50px",
+      paddingLeft: "100px"
+    }}
+  >
+    <div />
+    <Hint content="This is tooltip." place="top">
+      <button style={buttonStyle}>Top</button>
+    </Hint>
+    <div />
+    <Hint content="This is tooltip." place="left">
+      <button style={buttonStyle}>Left</button>
+    </Hint>
+    <div />
+    <Hint content="This is tooltip." place="right">
+      <button style={buttonStyle}>Right</button>
+    </Hint>
+    <div />
+    <Hint content="This is tooltip." place="bottom">
+      <button style={buttonStyle}>Bottom</button>
+    </Hint>
+    <div />
+  </div>
+));
+
+stories.add("for text", () => (
+  <div style={{ padding: "100px" }}>
+    <span>
+      aaaa
+      <Hint content="This is tooltip.">bbbb</Hint>
+      cccc
+      <Hint content="This is tooltip.">ffff</Hint>
+      eeee
+    </span>
+  </div>
+));
+
+class AnimationStyleInjector extends React.Component {
+  public componentDidMount() {
+    if (!document.getElementById("following-animation")) {
       const style = document.createElement("style");
       // language=CSS
       style.appendChild(
@@ -123,80 +126,95 @@ storiesOf("Default", module)
       style.setAttribute("id", "following-animation");
       document.getElementsByTagName("head")[0].appendChild(style);
     }
+  }
 
-    return (
-      <div style={{ padding: "100px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100px"
+  public componentWillUnmount() {
+    const style = document.getElementById("following-animation");
+    if (style) {
+      style.parentNode.removeChild(style);
+    }
+  }
+
+  public render() {
+    return this.props.children;
+  }
+}
+
+stories.add("following animation", () => (
+  <AnimationStyleInjector>
+    <div style={{ padding: "100px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100px"
+        }}
+      >
+        <Hint
+          content="This is tooltip."
+          place={select("place", knobOptions, "top")}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "turquoise",
+              animation: "contraction-target 3s linear 0s infinite"
+            }}
+          >
+            🤓
+          </div>
+        </Hint>
+      </div>
+    </div>
+  </AnimationStyleInjector>
+));
+
+stories.add("events", () => {
+  const ref = React.createRef<Hint>();
+  return (
+    <>
+      <div style={{ padding: "20px" }}>
+        <Hint content="Tooltip">
+          <button>Mouse Hover (default)</button>
+        </Hint>
+        <Hint content="Tooltip" events={["click"]}>
+          <button>Click Toggle</button>
+        </Hint>
+        <Hint content="Tooltip" events={["mouse-hover", "click"]}>
+          <button>Mouse Hover & Click Toggle</button>
+        </Hint>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <Hint content="Tooltip" events={["double-click"]}>
+          <button>Double-Click Toggle</button>
+        </Hint>
+        <Hint content="Tooltip" events={["focus"]}>
+          <button>Focus</button>
+        </Hint>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <Hint content="Tooltip" events={[]} ref={ref}>
+          <button>Manual Timing</button>
+        </Hint>
+        &nbsp;
+        <button
+          onClick={() => {
+            ref.current!.show();
           }}
         >
-          <Hint
-            content="This is tooltip."
-            place={select("place", knobOptions, "top")}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "turquoise",
-                animation: "contraction-target 3s linear 0s infinite"
-              }}
-            >
-              🤓
-            </div>
-          </Hint>
-        </div>
+          Show
+        </button>
+        <button
+          onClick={() => {
+            ref.current!.hide();
+          }}
+        >
+          Hide
+        </button>
       </div>
-    );
-  })
-  .add("events", () => {
-    const ref = React.createRef<Hint>();
-    return (
-      <>
-        <div style={{ padding: "20px" }}>
-          <Hint content="Tooltip">
-            <button>Mouse Hover (default)</button>
-          </Hint>
-          <Hint content="Tooltip" events={["click"]}>
-            <button>Click Toggle</button>
-          </Hint>
-          <Hint content="Tooltip" events={["mouse-hover", "click"]}>
-            <button>Mouse Hover & Click Toggle</button>
-          </Hint>
-        </div>
-        <div style={{ padding: "20px" }}>
-          <Hint content="Tooltip" events={["double-click"]}>
-            <button>Double-Click Toggle</button>
-          </Hint>
-          <Hint content="Tooltip" events={["focus"]}>
-            <button>Focus</button>
-          </Hint>
-        </div>
-        <div style={{ padding: "20px" }}>
-          <Hint content="Tooltip" events={[]} ref={ref}>
-            <button>Manual Timing</button>
-          </Hint>
-          &nbsp;
-          <button
-            onClick={() => {
-              ref.current!.show();
-            }}
-          >
-            Show
-          </button>
-          <button
-            onClick={() => {
-              ref.current!.hide();
-            }}
-          >
-            Hide
-          </button>
-        </div>
-      </>
-    );
-  });
+    </>
+  );
+});
