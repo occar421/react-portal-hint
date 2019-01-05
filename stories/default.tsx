@@ -64,13 +64,9 @@ stories.add("for text", () => (
   </div>
 ));
 
-class AnimationStyleInjector extends React.Component {
-  public componentDidMount() {
-    if (!document.getElementById("following-animation")) {
-      const style = document.createElement("style");
-      // language=CSS
-      style.appendChild(
-        document.createTextNode(`
+stories.add("following animation", () => (
+  <div style={{ padding: "100px" }}>
+    <style>{`
 @keyframes contraction-target {
     0% {
         width: 50px;
@@ -120,56 +116,33 @@ class AnimationStyleInjector extends React.Component {
     justify-content: center;
     align-items: center;
     animation: contraction-content 1s linear 0s infinite;
-}
-      `)
-      );
-      style.setAttribute("id", "following-animation");
-      document.getElementsByTagName("head")[0].appendChild(style);
-    }
-  }
-
-  public componentWillUnmount() {
-    const style = document.getElementById("following-animation");
-    if (style) {
-      style.parentNode.removeChild(style);
-    }
-  }
-
-  public render() {
-    return this.props.children;
-  }
-}
-
-stories.add("following animation", () => (
-  <AnimationStyleInjector>
-    <div style={{ padding: "100px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100px"
-        }}
+}`}</style>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100px"
+      }}
+    >
+      <Hint
+        content="This is tooltip."
+        place={select("place", knobOptions, "top")}
       >
-        <Hint
-          content="This is tooltip."
-          place={select("place", knobOptions, "top")}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "turquoise",
+            animation: "contraction-target 3s linear 0s infinite"
+          }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "turquoise",
-              animation: "contraction-target 3s linear 0s infinite"
-            }}
-          >
-            🤓
-          </div>
-        </Hint>
-      </div>
+          🤓
+        </div>
+      </Hint>
     </div>
-  </AnimationStyleInjector>
+  </div>
 ));
 
 stories.add("events", () => {
