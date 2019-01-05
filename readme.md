@@ -1,6 +1,6 @@
 # react-portal-hint
 
-This library is experimental phase. Everything is subject to change.
+This library is in the demonstration phase. Everything is subject to change.
 
 Tooltip/Popover which exploits React Portals & ResizeObserver. Parallel fading is enabled.  
 [Demo](https://react-portal-hint-demo.netlify.com/)
@@ -20,7 +20,7 @@ Tooltip/Popover which exploits React Portals & ResizeObserver. Parallel fading i
 - [x] Support more events
 - [ ] Support more place options (combinations)
 - [ ] Resolve margin problem
-- [ ] Resolve CSS Grid problem
+- [ ] Resolve CSS Flexbox & Grid problem
 - [ ] Well-documented documents
 
 ## How to use
@@ -35,3 +35,11 @@ import "react-portal-hint/default.css";
   <button>Something happens...</button>
 </Hint>;
 ```
+
+## Props
+
+TODO
+
+## License
+
+MIT
