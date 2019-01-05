@@ -29,7 +29,7 @@ class HintBody extends React.Component<IProperty, State> {
   private ref = React.createRef<HTMLDivElement>();
   private modalRoot = null;
   private ro = new ResizeObserver(entries => {
-    if (this.props.shows && entries && entries[0]) {
+    if (entries && entries[0]) {
       // too problematic code. ResizeObserver's rect didn't work well
       this.setState({
         contentRect: this.ref.current!.getBoundingClientRect(),

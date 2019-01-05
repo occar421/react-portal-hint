@@ -35,14 +35,18 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
   public readonly state: State = initialState;
   private ref = React.createRef<HTMLDivElement>();
-  private ro = new ResizeObserver(() => {
-    if (this.state.rendersBody) {
+  private ro = new ResizeObserver(entries => {
+    if (this.state.rendersBody && entries && entries[0]) {
       // too problematic code. ResizeObserver's rect didn't work well
       this.setState({ rect: this.ref.current!.getBoundingClientRect() });
     }
   });
   public readonly show = () => {
-    this.setState({ rendersBody: true, showsBody: true });
+    this.setState({
+      rendersBody: true,
+      showsBody: true,
+      rect: this.ref.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
+    });
   };
   public readonly hide = () => {
     this.setState({ showsBody: false });
