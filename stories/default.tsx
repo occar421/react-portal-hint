@@ -1,5 +1,5 @@
 /* tslint:disable:jsx-no-lambda max-classes-per-file */
-import { select, withKnobs } from "@storybook/addon-knobs";
+import { boolean, select, withKnobs } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
 // @ts-ignore
@@ -234,6 +234,8 @@ body { height: 100%; width: 100%; margin: 0; }
             },
             "top"
           )}
+          targetMoves={boolean("Consider it moves", true)}
+          rendersSmoothly={boolean("Smooth move", true)}
         >
           <div>
             <div

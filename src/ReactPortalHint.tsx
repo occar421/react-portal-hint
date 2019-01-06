@@ -11,6 +11,8 @@ interface IProperty {
   centralizes: boolean; // TODO implement this feature: centralize hint position at the edge
   bodyClass: string;
   usesTransition: boolean; // TODO implement this feature: users CSS transition or not
+  targetMoves: boolean;
+  rendersSmoothly: boolean;
   events: Event[];
   keepsOriginalPlace: boolean; // TODO implement this feature: hint position transition
   content: JSX.Element | string | ((rect: ClientRect) => JSX.Element | string);
@@ -29,6 +31,8 @@ const defaultProps: Partial<IProperty> = {
   centralizes: true,
   bodyClass: "react-portal-hint__body",
   usesTransition: true,
+  targetMoves: false,
+  rendersSmoothly: true,
   events: ["mouse-hover"],
   safetyMarginOfHint: 4,
   keepsOriginalPlace: false
@@ -48,19 +52,32 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   private ref = React.createRef<HTMLDivElement>();
 
   private ro = new ResizeObserver(entries => {
-    if (this.state.rendersBody && entries && entries[0]) {
+    if (
+      !this.props.targetMoves &&
+      this.state.rendersBody &&
+      entries &&
+      entries[0]
+    ) {
       // too problematic code. ResizeObserver's rect didn't work well
-      this.setState({ rect: this.ref.current!.getBoundingClientRect() });
+      this.updateRect();
     }
   });
+  private intervalHandler: NodeJS.Timeout;
 
   public componentDidMount() {
-    this.setState({ rect: this.ref.current!.getBoundingClientRect() });
     this.ro.observe(this.ref.current!);
+
+    this.intervalHandler = setInterval(() => {
+      if (this.props.targetMoves && this.state.rendersBody) {
+        this.updateRect();
+      }
+    }, 50);
   }
 
   public componentWillUnmount() {
     this.ro.disconnect();
+
+    clearInterval(this.intervalHandler);
   }
 
   public render() {
@@ -83,6 +100,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
             rect={this.state.rect}
             place={this.props.place}
             safetyMargin={this.props.safetyMarginOfHint}
+            rendersSmoothly={this.props.rendersSmoothly}
             shows={this.state.showsBody}
             bodyClass={this.props.bodyClass}
             shownClass={"shown"}
@@ -108,6 +126,10 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   };
   public readonly hide = () => {
     this.setState({ showsBody: false });
+  };
+
+  private updateRect = () => {
+    this.setState({ rect: this.ref.current!.getBoundingClientRect() });
   };
 
   private onClick = () => {
