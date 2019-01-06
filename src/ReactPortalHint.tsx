@@ -66,17 +66,8 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   });
   private intervalHandler: NodeJS.Timeout;
 
-  // TODO consider react lifecycle more
-  // situation: children changed to text to element
-  // addEventListener for childRef && observe should be run after render?
-  // removeEventListener for wrapRef && unobserve should be run after render?
-
   public componentDidMount() {
-    const targetRef = this.targetRef;
-
-    this.addAllEventTo(targetRef);
-
-    this.ro.observe(targetRef);
+    this.ro.observe(this.targetRef);
 
     this.intervalHandler = setInterval(() => {
       if (this.props.targetMoves && this.state.rendersBody) {
@@ -86,22 +77,36 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   public componentWillUnmount() {
-    this.removeAllEventOf(this.targetRef);
-
     this.ro.disconnect();
 
     clearInterval(this.intervalHandler);
   }
 
   public render() {
+    const events: Partial<React.DOMAttributes<HTMLElement>> = {
+      onClick: this.onClick,
+      onDoubleClick: this.onDoubleClick,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave
+    };
+
     return (
       <>
         {typeof this.props.children === "object" &&
         "type" in this.props.children &&
         !("children" in this.props.children) ? (
-          React.cloneElement(this.props.children, { ref: this.childRef })
+          React.cloneElement(this.props.children, {
+            ref: this.childRef,
+            ...events
+          })
         ) : (
-          <span style={{ display: "inline-flex" }} ref={this.wrapRef}>
+          <span
+            style={{ display: "inline-flex" }}
+            ref={this.wrapRef}
+            {...events}
+          >
             {this.props.children}
           </span>
         )}
@@ -140,24 +145,6 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
   private get targetRef() {
     return this.childRef.current || this.wrapRef.current!;
-  }
-
-  private addAllEventTo(ref: HTMLElement) {
-    ref.addEventListener("click", this.onClick);
-    ref.addEventListener("dblclick", this.onDoubleClick);
-    ref.addEventListener("focus", this.onFocus);
-    ref.addEventListener("blur", this.onBlur);
-    ref.addEventListener("mouseenter", this.onMouseEnter);
-    ref.addEventListener("mouseleave", this.onMouseLeave);
-  }
-
-  private removeAllEventOf(ref: HTMLElement) {
-    ref.removeEventListener("click", this.onClick);
-    ref.removeEventListener("dblclick", this.onDoubleClick);
-    ref.removeEventListener("focus", this.onFocus);
-    ref.removeEventListener("blur", this.onBlur);
-    ref.removeEventListener("mouseenter", this.onMouseEnter);
-    ref.removeEventListener("mouseleave", this.onMouseLeave);
   }
 
   private updateRect = () => {
