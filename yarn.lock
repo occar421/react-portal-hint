@@ -7028,8 +7028,8 @@ trough@^1.0.0:
     glob "^7.1.2"
 
 ts-loader@^5.3.1:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-5.3.1.tgz#70614c8ec4354a9c8b89c9f97b2becb7a98a3980"
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-5.3.3.tgz#8b4af042e773132d86b3c99ef0acf3b4d325f473"
   dependencies:
     chalk "^2.3.0"
     enhanced-resolve "^4.0.0"
