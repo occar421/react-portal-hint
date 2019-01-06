@@ -39,8 +39,10 @@ const defaultProps: Partial<IProperty> = {
 };
 
 class ReactPortalHint extends React.Component<IProperty, State> {
-  public static defaultProps: Pick<IProperty,
-    keyof typeof defaultProps> = defaultProps as any;
+  public static defaultProps: Pick<
+    IProperty,
+    keyof typeof defaultProps
+  > = defaultProps as any;
 
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
@@ -48,7 +50,6 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
   public readonly state: State = initialState;
 
-  // private ref = React.createRef<HTMLDivElement>();
   private childRef = React.createRef<HTMLElement>();
   private wrapRef = React.createRef<HTMLSpanElement>();
 
@@ -71,7 +72,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   // removeEventListener for wrapRef && unobserve should be run after render?
 
   public componentDidMount() {
-    const targetRef = this.childRef.current || this.wrapRef.current!;
+    const targetRef = this.targetRef;
 
     this.addAllEventTo(targetRef);
 
@@ -85,9 +86,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   public componentWillUnmount() {
-    const targetRef = this.childRef.current || this.wrapRef.current!;
-
-    this.removeAllEventOf(targetRef);
+    this.removeAllEventOf(this.targetRef);
 
     this.ro.disconnect();
 
@@ -129,17 +128,19 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   public readonly show = () => {
-    const targetRef = this.childRef.current || this.wrapRef.current!;
-
     this.setState({
       rendersBody: true,
       showsBody: true,
-      rect: targetRef.getBoundingClientRect() // if observer works in all situation, this is not necessary
+      rect: this.targetRef.getBoundingClientRect() // if observer works in all situation, this is not necessary
     });
   };
   public readonly hide = () => {
     this.setState({ showsBody: false });
   };
+
+  private get targetRef() {
+    return this.childRef.current || this.wrapRef.current!;
+  }
 
   private addAllEventTo(ref: HTMLElement) {
     ref.addEventListener("click", this.onClick);
@@ -160,9 +161,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   private updateRect = () => {
-    const targetRef = this.childRef.current || this.wrapRef.current!;
-
-    this.setState({ rect: targetRef.getBoundingClientRect() });
+    this.setState({ rect: this.targetRef.getBoundingClientRect() });
   };
 
   private onClick = () => {
