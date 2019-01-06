@@ -3,11 +3,12 @@ import * as ReactDOM from "react-dom";
 // @ts-ignore
 import ResizeObserver from "resize-observer-polyfill";
 import { get as getBaseElement } from "./baseHelper";
-import { Place } from "./models";
+import { ActualPlace, Place } from "./models";
 
 interface IProperty {
   rect: Readonly<ClientRect>;
-  place: Place;
+  place: Place | ActualPlace[];
+  safetyMargin: number;
   shows: boolean;
   bodyClass: string;
   shownClass: string;
@@ -21,6 +22,24 @@ const initialState = {
   onceRendered: false
 };
 type State = Readonly<typeof initialState>;
+
+function placeToAttempts(place: Place): ActualPlace[] {
+  switch (place) {
+    case "top":
+    case "bottom":
+    case "left":
+    case "right":
+      return [place];
+    case "column":
+      return ["top", "bottom"];
+    case "row":
+      return ["left", "right"];
+    case "start":
+      return ["top", "left"];
+    case "end":
+      return ["bottom", "right"];
+  }
+}
 
 class HintBody extends React.Component<IProperty, State> {
   public readonly state: State = initialState;
@@ -58,67 +77,112 @@ class HintBody extends React.Component<IProperty, State> {
   }
 
   public render() {
-    let styles: React.CSSProperties = {
-      display: "inline-flex",
-      position: "absolute"
-    };
+    const position = { top: 0, left: 0 };
+    let showingPlace = "";
     if (this.state.contentRect) {
-      if (this.props.place === "top") {
-        const targetHorizontalCenter =
-          (this.props.rect.left + this.props.rect.right) / 2;
-        const targetTop = this.props.rect.top;
+      const attempts: ActualPlace[] =
+        this.props.place instanceof Array
+          ? this.props.place
+          : placeToAttempts(this.props.place);
 
-        const contentWidth = this.state.contentRect.width;
-        const contentHeight = this.state.contentRect.height;
+      for (const place of attempts) {
+        showingPlace = place;
+        if (place === "top") {
+          const targetHorizontalCenter =
+            (this.props.rect.left + this.props.rect.right) / 2;
+          const targetTop = this.props.rect.top;
 
-        // FIXME: strangely, it is not align center...
-        styles = {
-          ...styles,
-          left: `${targetHorizontalCenter - contentWidth / 2}px`,
-          top: `${targetTop - contentHeight}px`
-        };
-      } else if (this.props.place === "bottom") {
-        const targetBottom = this.props.rect.bottom;
-        const targetHorizontalCenter =
-          (this.props.rect.left + this.props.rect.right) / 2;
+          const contentWidth = this.state.contentRect.width;
+          const contentHeight = this.state.contentRect.height;
 
-        const contentWidth = this.state.contentRect.width;
+          position.left = targetHorizontalCenter - contentWidth / 2;
+          position.top = targetTop - contentHeight;
 
-        // FIXME: strangely, it is not align center...
-        styles = {
-          ...styles,
-          left: `${targetHorizontalCenter - contentWidth / 2}px`,
-          top: `${targetBottom}px`
-        };
-      } else if (this.props.place === "left") {
-        const targetLeft = this.props.rect.left;
-        const targetVerticalCenter =
-          (this.props.rect.top + this.props.rect.bottom) / 2;
+          if (
+            this.props.safetyMargin <= position.top &&
+            this.props.safetyMargin <= position.left &&
+            position.left + contentWidth + this.props.safetyMargin <
+              window.innerWidth
+          ) {
+            // valid position
+            break;
+          }
+        } else if (place === "bottom") {
+          const targetBottom = this.props.rect.bottom;
+          const targetHorizontalCenter =
+            (this.props.rect.left + this.props.rect.right) / 2;
 
-        const contentWidth = this.state.contentRect.width;
-        const contentHeight = this.state.contentRect.height;
+          const contentWidth = this.state.contentRect.width;
+          const contentHeight = this.state.contentRect.height;
 
-        styles = {
-          ...styles,
-          left: `${targetLeft - contentWidth}px`,
-          top: `${targetVerticalCenter - contentHeight / 2}px`
-        };
-      } else if (this.props.place === "right") {
-        const targetRight = this.props.rect.right;
-        const targetVerticalCenter =
-          (this.props.rect.top + this.props.rect.bottom) / 2;
+          position.left = targetHorizontalCenter - contentWidth / 2;
+          position.top = targetBottom;
 
-        const contentHeight = this.state.contentRect.height;
+          if (
+            position.top + contentHeight + this.props.safetyMargin <
+              window.innerHeight &&
+            this.props.safetyMargin <= position.left &&
+            position.left + contentWidth + this.props.safetyMargin <
+              window.innerWidth
+          ) {
+            // valid position
+            break;
+          }
+        } else if (place === "left") {
+          const targetLeft = this.props.rect.left;
+          const targetVerticalCenter =
+            (this.props.rect.top + this.props.rect.bottom) / 2;
 
-        styles = {
-          ...styles,
-          left: `${targetRight}px`,
-          top: `${targetVerticalCenter - contentHeight / 2}px`
-        };
+          const contentWidth = this.state.contentRect.width;
+          const contentHeight = this.state.contentRect.height;
+
+          position.left = targetLeft - contentWidth;
+          position.top = targetVerticalCenter - contentHeight / 2;
+
+          if (
+            this.props.safetyMargin <= position.left &&
+            this.props.safetyMargin <= position.top &&
+            position.top + contentHeight + this.props.safetyMargin <
+              window.innerHeight
+          ) {
+            // valid position
+            break;
+          }
+        } else if (place === "right") {
+          const targetRight = this.props.rect.right;
+          const targetVerticalCenter =
+            (this.props.rect.top + this.props.rect.bottom) / 2;
+
+          const contentWidth = this.state.contentRect.width;
+          const contentHeight = this.state.contentRect.height;
+
+          position.left = targetRight;
+          position.top = targetVerticalCenter - contentHeight / 2;
+
+          if (
+            position.left + contentWidth + this.props.safetyMargin <
+              window.innerWidth &&
+            this.props.safetyMargin <= position.top &&
+            position.top + contentHeight + this.props.safetyMargin <
+              window.innerHeight
+          ) {
+            // valid position
+            break;
+          }
+        } else {
+          throw new Error("Invalid argument `place`.");
+        }
       }
     }
 
-    const placeClass: string = this.props.place; // temporary
+    const styles: React.CSSProperties = {
+      display: "inline-flex",
+      position: "absolute",
+      left: `${position.left || 0}px`,
+      top: `${position.top || 0}px`
+    };
+
+    const placeClass: string = showingPlace; // temporary
 
     return ReactDOM.createPortal(
       <div

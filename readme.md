@@ -2,7 +2,7 @@
 
 This library is in the demonstration phase. Everything is subject to change.
 
-Tooltip/Popover which exploits React Portals & ResizeObserver. Parallel fading is enabled.  
+Tooltip/Popover which exploits React Portals. Parallel fading is enabled.  
 [Demo](https://react-portal-hint-demo.netlify.com/)
 
 [![CircleCI](https://circleci.com/gh/occar421/react-portal-hint.svg?style=svg)](https://circleci.com/gh/occar421/react-portal-hint)
@@ -16,12 +16,15 @@ Tooltip/Popover which exploits React Portals & ResizeObserver. Parallel fading i
 - [x] Support place options (top, button, left, right)
 - [x] Chore (rollup 1.0, use node-sass watch)
 - [x] Make portal root element configurable
-- [x] Follow target or hint content size or position (Use ResizeObserver?)
+- [x] Follow target or hint content size or position (Use ResizeObserver)
 - [x] Support more events
-- [ ] Support more place options (combinations)
+- [x] Support more place options (combinations)
+- [ ] Implement `transform` observation (`setInterval` or `requestAnimationFrame` instead of ResizeObserver?)
 - [ ] Resolve margin problem
 - [ ] Resolve CSS Flexbox & Grid problem
 - [ ] Well-documented documents
+- [ ] Purge `getBoundingClientRect` for the performance
+- [ ] Multi-browser support
 
 ## How to use
 

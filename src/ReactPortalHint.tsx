@@ -3,32 +3,45 @@ import * as React from "react";
 import ResizeObserver from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
 import HintBody from "./HintBody";
-import { Event, Place } from "./models";
+import { ActualPlace, Event, Place } from "./models";
 
 interface IProperty {
-  place: Place;
+  place: Place | ActualPlace[];
+  safetyMarginOfHint: number;
+  centralizes: boolean;
   bodyClass: string;
   useTransition: boolean;
   events: Event[];
+  keepsOriginalPlace: boolean;
   content: JSX.Element | string | ((rect: ClientRect) => JSX.Element | string);
 }
 
 const initialState = {
   rect: null as Readonly<ClientRect> | null,
   rendersBody: false,
-  showsBody: false
+  showsBody: false,
+  originalPlace: null as Place | null
 };
 type State = Readonly<typeof initialState>;
 
 class ReactPortalHint extends React.Component<IProperty, State> {
   public static defaultProps: Pick<
     IProperty,
-    "place" | "bodyClass" | "useTransition" | "events"
+    | "place"
+    | "safetyMarginOfHint"
+    | "centralizes"
+    | "bodyClass"
+    | "useTransition"
+    | "events"
+    | "keepsOriginalPlace"
   > = {
     place: "top",
+    centralizes: true, // TODO implement this feature: centralize hint position at the edge
     bodyClass: "react-portal-hint__body",
     useTransition: true,
-    events: ["mouse-hover"]
+    events: ["mouse-hover"],
+    safetyMarginOfHint: 4,
+    keepsOriginalPlace: false // TODO implement this feature: hint position transition
   };
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
@@ -80,6 +93,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
           <HintBody
             rect={this.state.rect}
             place={this.props.place}
+            safetyMargin={this.props.safetyMarginOfHint}
             shows={this.state.showsBody}
             bodyClass={this.props.bodyClass}
             shownClass={"shown"}

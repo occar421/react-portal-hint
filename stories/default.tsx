@@ -1,7 +1,9 @@
-/* tslint:disable:jsx-no-lambda */
+/* tslint:disable:jsx-no-lambda max-classes-per-file */
 import { select, withKnobs } from "@storybook/addon-knobs";
 import { storiesOf } from "@storybook/react";
 import * as React from "react";
+// @ts-ignore
+import Draggable from "react-draggable";
 import Hint from "../src/index";
 
 import "../src/default.css";
@@ -17,7 +19,11 @@ const knobOptions: { [s: string]: Place } = {
   Top: "top",
   Right: "right",
   Bottom: "bottom",
-  Left: "left"
+  Left: "left",
+  Column: "column",
+  Row: "row",
+  Start: "start",
+  End: "end"
 };
 
 const stories = storiesOf("Default", module).addDecorator(withKnobs);
@@ -191,3 +197,78 @@ stories.add("events", () => {
     </>
   );
 });
+
+const refForPlace = React.createRef<Hint>();
+
+stories.add(
+  "place",
+  () => (
+    <Draggable handle={".handle"} defaultPosition={{ x: 150, y: 150 }}>
+      <div
+        style={{
+          display: "inline-block"
+        }}
+      >
+        <style>{`
+html { background-color: lightgray; height: 100%; width: 100%; }
+body { height: 100%; width: 100%; margin: 0; }
+.react-portal-hint__body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    height: 60px;
+    width: 200px;
+}
+`}</style>
+
+        <Hint
+          ref={refForPlace}
+          content="Tooltip"
+          events={[]}
+          place={select(
+            "place",
+            {
+              ...knobOptions,
+              "Left > Top > Right (custom fallback)": ["left", "top", "right"]
+            },
+            "top"
+          )}
+        >
+          <div>
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "cadetblue",
+                borderTopLeftRadius: "5px",
+                borderTopRightRadius: "5px",
+                padding: "10px",
+                justifyContent: "center"
+              }}
+              className="handle"
+            >
+              Move
+            </div>
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "lightcoral",
+                borderBottomLeftRadius: "5px",
+                borderBottomRightRadius: "5px",
+                padding: "10px",
+                justifyContent: "center"
+              }}
+              onClick={() => {
+                const inst = refForPlace.current!;
+                inst.state.showsBody ? inst.hide() : inst.show();
+              }}
+            >
+              Toggle
+            </div>
+          </div>
+        </Hint>
+      </div>
+    </Draggable>
+  ),
+  { info: { propTablesExclude: [Draggable] } }
+);
