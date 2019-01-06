@@ -24,46 +24,35 @@ const initialState = {
 };
 type State = Readonly<typeof initialState>;
 
+const defaultProps: Partial<IProperty> = {
+  place: "top",
+  centralizes: true,
+  bodyClass: "react-portal-hint__body",
+  usesTransition: true,
+  events: ["mouse-hover"],
+  safetyMarginOfHint: 4,
+  keepsOriginalPlace: false
+};
+
 class ReactPortalHint extends React.Component<IProperty, State> {
   public static defaultProps: Pick<
     IProperty,
-    | "place"
-    | "safetyMarginOfHint"
-    | "centralizes"
-    | "bodyClass"
-    | "usesTransition"
-    | "events"
-    | "keepsOriginalPlace"
-  > = {
-    place: "top",
-    centralizes: true,
-    bodyClass: "react-portal-hint__body",
-    usesTransition: true,
-    events: ["mouse-hover"],
-    safetyMarginOfHint: 4,
-    keepsOriginalPlace: false
-  };
+    keyof typeof defaultProps
+  > = defaultProps as any;
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
   }
+
   public readonly state: State = initialState;
+
   private ref = React.createRef<HTMLDivElement>();
+
   private ro = new ResizeObserver(entries => {
     if (this.state.rendersBody && entries && entries[0]) {
       // too problematic code. ResizeObserver's rect didn't work well
       this.setState({ rect: this.ref.current!.getBoundingClientRect() });
     }
   });
-  public readonly show = () => {
-    this.setState({
-      rendersBody: true,
-      showsBody: true,
-      rect: this.ref.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
-    });
-  };
-  public readonly hide = () => {
-    this.setState({ showsBody: false });
-  };
 
   public componentDidMount() {
     this.setState({ rect: this.ref.current!.getBoundingClientRect() });
@@ -109,6 +98,17 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       </>
     );
   }
+
+  public readonly show = () => {
+    this.setState({
+      rendersBody: true,
+      showsBody: true,
+      rect: this.ref.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
+    });
+  };
+  public readonly hide = () => {
+    this.setState({ showsBody: false });
+  };
 
   private onClick = () => {
     if (this.props.events.includes("click")) {

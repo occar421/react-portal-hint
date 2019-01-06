@@ -45,8 +45,11 @@ class HintBody extends React.Component<IProperty, State> {
   public readonly state: State = initialState;
 
   private el = document.createElement("div");
+
   private ref = React.createRef<HTMLDivElement>();
+
   private modalRoot = null;
+
   private ro = new ResizeObserver(entries => {
     if (entries && entries[0]) {
       // too problematic code. ResizeObserver's rect didn't work well
