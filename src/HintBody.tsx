@@ -13,7 +13,7 @@ interface IProperty {
   bodyClass: string;
   shownClass: string;
   hiddenClass: string;
-  useTransition: boolean;
+  usesTransition: boolean;
   onDisappeared?(): void;
 }
 
@@ -98,13 +98,13 @@ class HintBody extends React.Component<IProperty, State> {
           position.left = targetHorizontalCenter - contentWidth / 2;
           position.top = targetTop - contentHeight;
 
+          // check if valid position
           if (
             this.props.safetyMargin <= position.top &&
             this.props.safetyMargin <= position.left &&
             position.left + contentWidth + this.props.safetyMargin <
               window.innerWidth
           ) {
-            // valid position
             break;
           }
         } else if (place === "bottom") {
@@ -118,6 +118,7 @@ class HintBody extends React.Component<IProperty, State> {
           position.left = targetHorizontalCenter - contentWidth / 2;
           position.top = targetBottom;
 
+          // check if valid position
           if (
             position.top + contentHeight + this.props.safetyMargin <
               window.innerHeight &&
@@ -125,7 +126,6 @@ class HintBody extends React.Component<IProperty, State> {
             position.left + contentWidth + this.props.safetyMargin <
               window.innerWidth
           ) {
-            // valid position
             break;
           }
         } else if (place === "left") {
@@ -139,13 +139,13 @@ class HintBody extends React.Component<IProperty, State> {
           position.left = targetLeft - contentWidth;
           position.top = targetVerticalCenter - contentHeight / 2;
 
+          // check if valid position
           if (
             this.props.safetyMargin <= position.left &&
             this.props.safetyMargin <= position.top &&
             position.top + contentHeight + this.props.safetyMargin <
               window.innerHeight
           ) {
-            // valid position
             break;
           }
         } else if (place === "right") {
@@ -159,6 +159,7 @@ class HintBody extends React.Component<IProperty, State> {
           position.left = targetRight;
           position.top = targetVerticalCenter - contentHeight / 2;
 
+          // check if valid position
           if (
             position.left + contentWidth + this.props.safetyMargin <
               window.innerWidth &&
@@ -166,7 +167,6 @@ class HintBody extends React.Component<IProperty, State> {
             position.top + contentHeight + this.props.safetyMargin <
               window.innerHeight
           ) {
-            // valid position
             break;
           }
         } else {
@@ -182,8 +182,6 @@ class HintBody extends React.Component<IProperty, State> {
       top: `${position.top || 0}px`
     };
 
-    const placeClass: string = showingPlace; // temporary
-
     return ReactDOM.createPortal(
       <div
         ref={this.ref}
@@ -192,10 +190,10 @@ class HintBody extends React.Component<IProperty, State> {
         className={[
           this.props.bodyClass,
           this.props.shows &&
-          (!this.props.useTransition || this.state.onceRendered)
+          (!this.props.usesTransition || this.state.onceRendered)
             ? this.props.shownClass
             : this.props.hiddenClass,
-          placeClass
+          showingPlace
         ].join(" ")}
       >
         {this.props.children}
@@ -206,7 +204,7 @@ class HintBody extends React.Component<IProperty, State> {
 
   private onTransitionEnd = () => {
     if (
-      this.props.useTransition &&
+      this.props.usesTransition &&
       !this.props.shows &&
       this.props.onDisappeared
     ) {

@@ -8,11 +8,11 @@ import { ActualPlace, Event, Place } from "./models";
 interface IProperty {
   place: Place | ActualPlace[];
   safetyMarginOfHint: number;
-  centralizes: boolean;
+  centralizes: boolean; // TODO implement this feature: centralize hint position at the edge
   bodyClass: string;
-  useTransition: boolean;
+  usesTransition: boolean; // TODO implement this feature: users CSS transition or not
   events: Event[];
-  keepsOriginalPlace: boolean;
+  keepsOriginalPlace: boolean; // TODO implement this feature: hint position transition
   content: JSX.Element | string | ((rect: ClientRect) => JSX.Element | string);
 }
 
@@ -31,17 +31,17 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     | "safetyMarginOfHint"
     | "centralizes"
     | "bodyClass"
-    | "useTransition"
+    | "usesTransition"
     | "events"
     | "keepsOriginalPlace"
   > = {
     place: "top",
-    centralizes: true, // TODO implement this feature: centralize hint position at the edge
+    centralizes: true,
     bodyClass: "react-portal-hint__body",
-    useTransition: true,
+    usesTransition: true,
     events: ["mouse-hover"],
     safetyMarginOfHint: 4,
-    keepsOriginalPlace: false // TODO implement this feature: hint position transition
+    keepsOriginalPlace: false
   };
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
@@ -98,7 +98,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
             bodyClass={this.props.bodyClass}
             shownClass={"shown"}
             hiddenClass={"hidden"}
-            useTransition={this.props.useTransition === true}
+            usesTransition={this.props.usesTransition === true}
             onDisappeared={this.onDisappeared}
           >
             {typeof this.props.content === "function"
