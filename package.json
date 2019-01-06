@@ -42,5 +42,13 @@
   },
   "dependencies": {
     "resize-observer-polyfill": "^1.5.1"
-  }
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "portal",
+    "hint",
+    "tooltip",
+    "popover"
+  ]
 }
