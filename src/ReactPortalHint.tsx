@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactIs from "react-is";
 // @ts-ignore
 import ResizeObserver from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
@@ -83,33 +84,9 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   public render() {
-    const events: Partial<React.DOMAttributes<HTMLElement>> = {
-      onClick: this.onClick,
-      onDoubleClick: this.onDoubleClick,
-      onFocus: this.onFocus,
-      onBlur: this.onBlur,
-      onMouseEnter: this.onMouseEnter,
-      onMouseLeave: this.onMouseLeave
-    };
-
     return (
       <>
-        {typeof this.props.children === "object" &&
-        "type" in this.props.children &&
-        !("children" in this.props.children) ? (
-          React.cloneElement(this.props.children, {
-            ref: this.childRef,
-            ...events
-          })
-        ) : (
-          <span
-            style={{ display: "inline-flex" }}
-            ref={this.wrapRef}
-            {...events}
-          >
-            {this.props.children}
-          </span>
-        )}
+        {this.renderTarget()}
         {this.state.rendersBody && this.state.rect && (
           <HintBody
             rect={this.state.rect}
@@ -142,6 +119,63 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   public readonly hide = () => {
     this.setState({ showsBody: false });
   };
+
+  private renderTarget() {
+    if (
+      typeof this.props.children === "undefined" ||
+      this.props.children === null
+    ) {
+      return;
+    }
+
+    const events: Partial<React.DOMAttributes<HTMLElement>> = {
+      onClick: this.onClick,
+      onDoubleClick: this.onDoubleClick,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave
+    };
+
+    switch (ReactIs.typeOf(this.props.children)) {
+      case ReactIs.Fragment:
+        throw new Error("Target with React Fragment is not supported");
+      case ReactIs.Portal:
+        throw new Error("Target with React Portal is not supported");
+    }
+
+    if (Array.isArray(this.props.children)) {
+      throw new Error("Target with React NodeArray is not supported");
+    } else if (typeof this.props.children === "object") {
+      if ("type" in this.props.children) {
+        if (typeof this.props.children.type === "function") {
+          // React Function/Class Component
+          throw Error(
+            "Target with React Function/Class Component is not supported"
+          );
+        }
+
+        if (!("children" in this.props.children)) {
+          // React element(s)
+
+          // register events and ref to the targets
+          return React.cloneElement(this.props.children, {
+            ...events,
+            ref: this.childRef
+          });
+        }
+      }
+
+      throw Error("Unknown");
+    } else {
+      // raw text
+      return (
+        <span {...events} style={{ display: "inline-flex" }} ref={this.wrapRef}>
+          {this.props.children}
+        </span>
+      );
+    }
+  }
 
   private get targetRef() {
     return this.childRef.current || this.wrapRef.current!;

@@ -22,6 +22,7 @@
     "@types/jest": "^23.3.12",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
+    "@types/react-is": "^16.7.0",
     "@types/storybook__addon-knobs": "^4.0.0",
     "@types/storybook__react": "^4.0.0",
     "jest": "^23.6.0",
@@ -43,7 +44,8 @@
   },
   "peerDependencies": {
     "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "react-is": "16.6.3"
   },
   "dependencies": {
     "resize-observer-polyfill": "^1.5.1"
