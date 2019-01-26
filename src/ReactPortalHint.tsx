@@ -148,7 +148,10 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       throw new Error("Target with React NodeArray is not supported");
     } else if (typeof this.props.children === "object") {
       if ("type" in this.props.children) {
-        if (typeof this.props.children.type === "function") {
+        if (
+          typeof this.props.children.type === "function" ||
+          ReactIs.isForwardRef(this.props.children)
+        ) {
           // React Function/Class Component
           throw Error(
             "Target with React Function/Class Component is not supported"

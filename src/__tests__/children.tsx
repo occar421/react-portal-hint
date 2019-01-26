@@ -16,9 +16,13 @@ class SubClassComponent extends React.Component {
   }
 }
 
-// const SubForwardRefComponent: any = React.forwardRef(
-//   ({ children }, ref: any) => <div ref={ref}>{children}</div>
-// );
+const SubForwardRefComponent: any = React.forwardRef(
+  ({ children }, ref: any) => (
+    <div id="a" ref={ref}>
+      {children}
+    </div>
+  )
+);
 
 describe("children", () => {
   it("accepts plain text", () => {
@@ -111,17 +115,13 @@ describe("children", () => {
     expect(queryByText("This is tooltip.")).toBeNull();
   });
 
-  // it("accepts forwardRef Component", () => {
-  //   const { getByText } = render(
-  //     <Hint content="This is tooltip." events={["click"]}>
-  //       <SubForwardRefComponent>Content</SubForwardRefComponent>
-  //     </Hint>
-  //   );
-  //
-  //   expect(getByText("Content")).toBeDefined();
-  //
-  //   fireEvent.click(getByText("Content"));
-  //
-  //   expect(getByText("This is tooltip.")).toBeDefined();
-  // });
+  it("denies forwardRef Component", () => {
+    expect(() =>
+      render(
+        <Hint content="This is tooltip." events={["click"]}>
+          <SubForwardRefComponent>Content</SubForwardRefComponent>
+        </Hint>
+      )
+    ).toThrow(/not supported/);
+  });
 });
