@@ -51,8 +51,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
   public readonly state: State = initialState;
 
-  private childRef = React.createRef<HTMLElement>();
-  private wrapRef = React.createRef<HTMLSpanElement>();
+  private targetRef = React.createRef<HTMLElement>();
 
   private ro = new ResizeObserver(entries => {
     if (
@@ -116,8 +115,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   public readonly show = () => {
     this.setState({
       rendersBody: true,
-      showsBody: true,
-      rect: this.targetRef.getBoundingClientRect() // if observer works in all situation, this is not necessary
+      showsBody: true
     });
   };
   public readonly hide = () => {
@@ -163,7 +161,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
           // register events and ref to the targets
           return React.cloneElement(this.props.children, {
-            ref: this.childRef
+            ref: this.targetRef
           });
         }
       }
@@ -172,7 +170,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     } else {
       // raw text
       return (
-        <span style={{ display: "inline-flex" }} ref={this.wrapRef}>
+        <span style={{ display: "inline-flex" }} ref={this.targetRef}>
           {this.props.children}
         </span>
       );
@@ -180,23 +178,28 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   private registerAllEvents = () => {
-    Object.entries(this.events).forEach(([eventName, eventHandler]) => {
-      this.targetRef.addEventListener(eventName, eventHandler as any);
-    });
+    if (this.targetRef.current) {
+      Object.entries(this.events).forEach(([eventName, eventHandler]) => {
+        this.targetRef.current.addEventListener(eventName, eventHandler as any);
+      });
+    }
   };
 
   private unregisterAllEvents = () => {
-    Object.entries(this.events).forEach(([eventName, eventHandler]) => {
-      this.targetRef.removeEventListener(eventName, eventHandler as any);
-    });
+    if (this.targetRef.current) {
+      Object.entries(this.events).forEach(([eventName, eventHandler]) => {
+        this.targetRef.current.removeEventListener(
+          eventName,
+          eventHandler as any
+        );
+      });
+    }
   };
 
-  private get targetRef() {
-    return this.childRef.current || this.wrapRef.current!;
-  }
-
   private updateRect = () => {
-    this.setState({ rect: this.targetRef.getBoundingClientRect() });
+    if (this.targetRef.current) {
+      this.setState({ rect: this.targetRef.current.getBoundingClientRect() });
+    }
   };
 
   private onClick = () => {
