@@ -74,16 +74,12 @@ class ReactPortalHint extends React.Component<IProperty, State> {
         this.updateRect();
       }
     }, 50);
-
-    this.registerAllEvents();
   }
 
   public componentWillUnmount() {
     this.ro.disconnect();
 
     clearInterval(this.intervalHandler);
-
-    this.unregisterAllEvents();
   }
 
   public render() {
@@ -131,6 +127,15 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       return;
     }
 
+    const events: Partial<React.DOMAttributes<HTMLElement>> = {
+      onClick: this.onClick,
+      onDoubleClick: this.onDoubleClick,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave
+    };
+
     switch (ReactIs.typeOf(this.props.children)) {
       case ReactIs.Fragment:
         throw new Error("Target with React Fragment is not supported");
@@ -162,6 +167,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
           // register events and ref to the targets
           return React.cloneElement(this.props.children, {
+            ...events,
             ref: this.targetRef
           });
         }
@@ -171,31 +177,16 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     } else {
       // raw text
       return (
-        <span style={{ display: "inline-flex" }} ref={this.targetRef}>
+        <span
+          {...events}
+          style={{ display: "inline-flex" }}
+          ref={this.targetRef}
+        >
           {this.props.children}
         </span>
       );
     }
   }
-
-  private registerAllEvents = () => {
-    if (this.targetRef.current) {
-      Object.entries(this.events).forEach(([eventName, eventHandler]) => {
-        this.targetRef.current.addEventListener(eventName, eventHandler as any);
-      });
-    }
-  };
-
-  private unregisterAllEvents = () => {
-    if (this.targetRef.current) {
-      Object.entries(this.events).forEach(([eventName, eventHandler]) => {
-        this.targetRef.current.removeEventListener(
-          eventName,
-          eventHandler as any
-        );
-      });
-    }
-  };
 
   private updateRect = () => {
     if (this.targetRef.current) {
@@ -245,18 +236,6 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     if (this.props.events.includes("mouse-hover")) {
       this.hide();
     }
-  };
-
-  // tslint:disable-next-line:member-ordering
-  private events: Partial<
-    { [K in keyof HTMLElementEventMap]: React.ReactEventHandler<HTMLElement> }
-  > = {
-    click: this.onClick,
-    dblclick: this.onDoubleClick,
-    focus: this.onFocus,
-    blur: this.onBlur,
-    mouseenter: this.onMouseEnter,
-    mouseleave: this.onMouseLeave
   };
 
   private onDisappeared = () => {
