@@ -6,22 +6,16 @@ import Hint from "../index";
 
 afterEach(cleanup);
 
-const SubFunctionComponent = ({ children }) => (
-  <div className="foo">{children}</div>
-);
+const SubFunctionComponent = ({ children }) => <div>{children}</div>;
 
 class SubClassComponent extends React.Component {
   public render() {
-    return <div className="foo">{this.props.children}</div>;
+    return <div>{this.props.children}</div>;
   }
 }
 
 const SubForwardRefComponent: any = React.forwardRef(
-  ({ children }, ref: any) => (
-    <div id="a" ref={ref}>
-      {children}
-    </div>
-  )
+  ({ children }, ref: any) => <div ref={ref}>{children}</div>
 );
 
 const SubLazyComponent = React.lazy(() =>
