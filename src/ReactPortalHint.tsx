@@ -142,12 +142,17 @@ class ReactPortalHint extends React.Component<IProperty, State> {
         throw new Error("Target with React Fragment is not supported");
       case ReactIs.Portal:
         throw new Error("Target with React Portal is not supported");
+      case ReactIs.Suspense:
+        throw new Error("Target with React Suspense is not supported");
     }
 
     if (Array.isArray(this.props.children)) {
       throw new Error("Target with React NodeArray is not supported");
     } else if (typeof this.props.children === "object") {
       if ("type" in this.props.children) {
+        if (ReactIs.isLazy(this.props.children.type)) {
+          throw new Error("Target with React lazy is not supported");
+        }
         if (
           typeof this.props.children.type === "function" ||
           ReactIs.isForwardRef(this.props.children)

@@ -24,6 +24,10 @@ const SubForwardRefComponent: any = React.forwardRef(
   )
 );
 
+const SubLazyComponent = React.lazy(() =>
+  Promise.resolve({ default: SubFunctionComponent })
+);
+
 describe("children", () => {
   it("accepts plain text", () => {
     const { getByText } = render(
@@ -123,5 +127,53 @@ describe("children", () => {
         </Hint>
       )
     ).toThrow(/not supported/);
+  });
+
+  it("denies suspense", async () => {
+    expect(() =>
+      render(
+        <Hint content="This is tooltip." events={["click"]}>
+          <React.Suspense fallback={"a"}>
+            <SubLazyComponent>Content</SubLazyComponent>
+          </React.Suspense>
+        </Hint>
+      )
+    ).toThrow(/not supported/);
+  });
+
+  it("denies lazy", async () => {
+    expect(() =>
+      render(
+        <React.Suspense fallback={"a"}>
+          <Hint content="This is tooltip." events={["click"]}>
+            <SubLazyComponent>Content</SubLazyComponent>
+          </Hint>
+        </React.Suspense>
+      )
+    ).toThrow(/not supported/);
+  });
+
+  it("works in lazy", async () => {
+    const { getByText, queryByText } = render(
+      <React.Suspense fallback={"a"}>
+        <SubLazyComponent>
+          <Hint content="This is tooltip." events={["click"]}>
+            Content
+          </Hint>
+        </SubLazyComponent>
+      </React.Suspense>
+    );
+
+    expect(getByText("a")).toBeDefined();
+    expect(queryByText("Content")).toBeNull();
+    expect(queryByText("This is tooltip.")).toBeNull();
+
+    await SubLazyComponent;
+
+    expect(getByText("Content")).toBeDefined();
+
+    fireEvent.click(getByText("Content"));
+
+    expect(getByText("This is tooltip.")).toBeDefined();
   });
 });
