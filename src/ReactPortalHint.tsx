@@ -75,12 +75,16 @@ class ReactPortalHint extends React.Component<IProperty, State> {
         this.updateRect();
       }
     }, 50);
+
+    this.registerAllEvents();
   }
 
   public componentWillUnmount() {
     this.ro.disconnect();
 
     clearInterval(this.intervalHandler);
+
+    this.unregisterAllEvents();
   }
 
   public render() {
@@ -128,15 +132,6 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       return;
     }
 
-    const events: Partial<React.DOMAttributes<HTMLElement>> = {
-      onClick: this.onClick,
-      onDoubleClick: this.onDoubleClick,
-      onFocus: this.onFocus,
-      onBlur: this.onBlur,
-      onMouseEnter: this.onMouseEnter,
-      onMouseLeave: this.onMouseLeave
-    };
-
     switch (ReactIs.typeOf(this.props.children)) {
       case ReactIs.Fragment:
         throw new Error("Target with React Fragment is not supported");
@@ -168,7 +163,6 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
           // register events and ref to the targets
           return React.cloneElement(this.props.children, {
-            ...events,
             ref: this.childRef
           });
         }
@@ -178,12 +172,24 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     } else {
       // raw text
       return (
-        <span {...events} style={{ display: "inline-flex" }} ref={this.wrapRef}>
+        <span style={{ display: "inline-flex" }} ref={this.wrapRef}>
           {this.props.children}
         </span>
       );
     }
   }
+
+  private registerAllEvents = () => {
+    Object.entries(this.events).forEach(([eventName, eventHandler]) => {
+      this.targetRef.addEventListener(eventName, eventHandler as any);
+    });
+  };
+
+  private unregisterAllEvents = () => {
+    Object.entries(this.events).forEach(([eventName, eventHandler]) => {
+      this.targetRef.removeEventListener(eventName, eventHandler as any);
+    });
+  };
 
   private get targetRef() {
     return this.childRef.current || this.wrapRef.current!;
@@ -235,6 +241,18 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     if (this.props.events.includes("mouse-hover")) {
       this.hide();
     }
+  };
+
+  // tslint:disable-next-line:member-ordering
+  private events: Partial<
+    { [K in keyof HTMLElementEventMap]: React.ReactEventHandler<HTMLElement> }
+  > = {
+    click: this.onClick,
+    dblclick: this.onDoubleClick,
+    focus: this.onFocus,
+    blur: this.onBlur,
+    mouseenter: this.onMouseEnter,
+    mouseleave: this.onMouseLeave
   };
 
   private onDisappeared = () => {
