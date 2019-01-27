@@ -25,6 +25,7 @@
     "@types/react-is": "^16.7.0",
     "@types/storybook__addon-knobs": "^4.0.0",
     "@types/storybook__react": "^4.0.0",
+    "install-peers": "^1.0.3",
     "jest": "^23.6.0",
     "jest-dom": "^3.0.0",
     "node-sass": "^4.11.0",
