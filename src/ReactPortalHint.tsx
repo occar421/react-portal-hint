@@ -115,7 +115,8 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   public readonly show = () => {
     this.setState({
       rendersBody: true,
-      showsBody: true
+      showsBody: true,
+      rect: this.targetRef.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
     });
   };
   public readonly hide = () => {
