@@ -67,7 +67,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   private intervalHandler: NodeJS.Timeout;
 
   public componentDidMount() {
-    this.ro.observe(this.targetRef);
+    this.ro.observe(this.targetRef.current!);
 
     this.intervalHandler = setInterval(() => {
       if (this.props.targetMoves && this.state.rendersBody) {
