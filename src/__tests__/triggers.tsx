@@ -18,6 +18,8 @@ describe("triggers", () => {
       </Hint>
     );
 
+    expect(queryByText("This is tooltip.")).toBeNull();
+
     fireEvent.mouseEnter(getByText("Content"));
 
     expect(getByText("This is tooltip.")).toBeDefined();
@@ -34,6 +36,8 @@ describe("triggers", () => {
         Content
       </Hint>
     );
+
+    expect(queryByText("This is tooltip.")).toBeNull();
 
     fireEvent.click(getByText("Content"));
 
@@ -56,6 +60,8 @@ describe("triggers", () => {
       </Hint>
     );
 
+    expect(queryByText("This is tooltip.")).toBeNull();
+
     fireEvent.doubleClick(getByText("Content"));
 
     expect(getByText("This is tooltip.")).toBeDefined();
@@ -72,6 +78,8 @@ describe("triggers", () => {
         Content
       </Hint>
     );
+
+    expect(queryByText("This is tooltip.")).toBeNull();
 
     fireEvent.focus(getByText("Content"));
 
