@@ -28,8 +28,6 @@ jobs:
 
       - run: yarn lint
 
-      - run: yarn add react-is # ugly making-up
-
       - run: yarn test
 
       - run: yarn build
