@@ -11,5 +11,5 @@ export default {
       cacheRoot: ".rts2_cache" // default value. Explicitly set for .gitignore
     })
   ],
-  external: ["react", "react-dom", "resize-observer-polyfill"]
+  external: ["react", "react-dom", "react-is", "resize-observer-polyfill"]
 };
