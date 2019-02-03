@@ -54,7 +54,7 @@ jobs:
 
       - store_artifacts:
           path: ~/repo/cypress/videos
-          destication: e2e-video
+          destination: e2e-video
 
       - persist_to_workspace:
           root: ~/repo

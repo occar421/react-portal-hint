@@ -8,6 +8,7 @@ export default {
   },
   plugins: [
     typescript({
+      exclude: ["**/__tests__/**/*", "cypress/**/*"],
       cacheRoot: ".rts2_cache" // default value. Explicitly set for .gitignore
     })
   ],

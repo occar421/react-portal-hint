@@ -6,7 +6,7 @@
   "author": "MasuqaT <occar@hotmail.co.jp>",
   "license": "MIT",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "build": "rollup -c && node-sass ./src/ -o dist/",
     "style-watch": "node-sass ./src/ -o src/ && node-sass ./src/ -o src/ --watch",
