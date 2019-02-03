@@ -13,7 +13,7 @@
     "test": "jest",
     "lint": "tslint -p tsconfig.json",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "build-storybook": "build-storybook -c .storybook",
+    "build-storybook": "node-sass ./src/ -o src/ && build-storybook -c .storybook",
     "serve-static-storybook": "http-server ./storybook-static -p 8765",
     "cypress": "cypress run --env BASE_URL=http://localhost:8765"
   },
