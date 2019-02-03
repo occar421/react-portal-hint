@@ -46,7 +46,7 @@ jobs:
           name: Build Storybook
           command: |
             yarn build-storybook
-            sudo apt-get install zip -y
+            apt-get install zip -y
             zip ~/tmp/storybook-static.zip -r storybook-static
 
       - store_artifacts:
