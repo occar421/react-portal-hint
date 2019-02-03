@@ -4,7 +4,8 @@
     "allowJs": false,
     "declaration": true,
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": []
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

@@ -64,7 +64,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       this.updateRect();
     }
   });
-  private intervalHandler: NodeJS.Timeout;
+  private intervalHandler: number;
 
   public componentDidMount() {
     this.ro.observe(this.targetRef.current!);
