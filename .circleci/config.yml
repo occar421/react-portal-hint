@@ -36,13 +36,25 @@ jobs:
 
       - run: yarn build
 
+      - store_artifacts:
+          path: ~/repo/dist
+          destination: dist
+
       - run: yarn build-storybook
+
+      - store_artifacts:
+          path: ~/repo/storybook-static
+          destination: storybook-static
 
       - run:
           name: E2E Test
           command: |
             yarn serve-static-storybook --silent & yarn wait-on http://localhost:8765
             yarn cypress
+
+      - store_artifacts:
+          path: ~/repo/cypress/videos
+          destication: e2e-video
 
       - persist_to_workspace:
           root: ~/repo
