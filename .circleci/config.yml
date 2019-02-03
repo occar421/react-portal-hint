@@ -3,7 +3,10 @@ version: 2
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:10
+    - image: cypress/base:10
+      environment:
+        ## this enables colors in the output
+        TERM: xterm
 
 jobs:
   build:
@@ -35,24 +38,11 @@ jobs:
 
       - run: yarn build-storybook
 
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
-
-  e2e:
-    working_directory: ~/repo
-    docker:
-      - image: cypress/base:10
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    steps:
-      - attach_workspace:
-          at: ~/repo
-
-      - run: yarn serve-static-storybook & yarn wait-on http://localhost:8765
-
-      - run: yarn cypress
+      - run:
+          name: E2E Test
+          command: |
+            yarn serve-static-storybook & yarn wait-on http://localhost:8765
+            yarn cypress
 
       - persist_to_workspace:
           root: ~/repo
@@ -79,15 +69,9 @@ workflows:
           filters:
             tags:
               only: /^v.+/
-      - e2e:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /^v.+/
       - deploy:
           requires:
-            - e2e
+            - build
           filters:
             tags:
               only: /^v.+/
