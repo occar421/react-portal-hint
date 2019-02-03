@@ -5,7 +5,7 @@
     "declaration": true,
     "jsx": "react",
     "esModuleInterop": true,
-    "types": ["cypress"]
+    "types": []
   },
   "include": ["src/**/*", "cypress/**/*"],
   "exclude": ["node_modules"]

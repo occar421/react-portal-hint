@@ -1,3 +1,4 @@
+/// <reference types="jest" />
 /* tslint:disable:no-implicit-dependencies no-submodule-imports */
 import "jest-dom/extend-expect";
 import * as React from "react";

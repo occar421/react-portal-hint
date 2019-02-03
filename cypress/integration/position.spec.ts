@@ -1,3 +1,9 @@
+/// <reference types="cypress" />
+/* tslint:disable:no-implicit-dependencies */
+import * as Chai from "chai";
+
+declare const expect: Chai.ExpectStatic;
+
 function generateStoryUrl(
   kind: string,
   story: string,
