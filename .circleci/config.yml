@@ -43,6 +43,9 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: cypress/base:10
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
     steps:
       - attach_workspace:
           at: ~/repo
@@ -76,9 +79,15 @@ workflows:
           filters:
             tags:
               only: /^v.+/
-      - deploy:
+      - e2e:
           requires:
             - build
+          filters:
+            tags:
+              only: /^v.+/
+      - deploy:
+          requires:
+            - e2e
           filters:
             tags:
               only: /^v.+/
