@@ -41,7 +41,7 @@ jobs:
       - run:
           name: E2E Test
           command: |
-            yarn serve-static-storybook & yarn wait-on http://localhost:8765
+            yarn serve-static-storybook /dev/null 2>&1 & yarn wait-on http://localhost:8765
             yarn cypress
 
       - persist_to_workspace:
