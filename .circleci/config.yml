@@ -34,7 +34,7 @@ jobs:
 
       - run: yarn lint
 
-      - run: yarn test
+      - run: yarn test:unit
 
       - run: yarn build
 
@@ -52,7 +52,7 @@ jobs:
           name: E2E Test
           command: |
             yarn serve-static-storybook --silent & yarn wait-on http://localhost:8765
-            yarn cypress
+            yarn test:e2e
 
       - store_artifacts:
           path: ~/repo/cypress/videos
