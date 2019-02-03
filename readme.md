@@ -24,6 +24,7 @@ Tooltip/Popover which exploits React Portals. Parallel fading is enabled.
 - [x] Resolve CSS Flexbox & Grid problem
 - [x] Add integration tests
 - [ ] Add E2E test
+- [ ] Examples (Flexbox, CSS grid)
 - [ ] Accepts forwardRef
 - [ ] Accepts multiple children
 - [ ] Accepts Refs as props (exotic)
