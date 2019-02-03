@@ -42,10 +42,14 @@ jobs:
           path: ~/repo/dist
           destination: dist
 
-      - run: yarn build-storybook
+      - run:
+          name: Build Storybook
+          command: |
+            yarn build-storybook
+            zip ~/tmp/storybook-static.zip -r storybook-static
 
       - store_artifacts:
-          path: ~/repo/storybook-static
+          path: ~/tmp/storybook-static.zip
           destination: storybook-static
 
       - run:
