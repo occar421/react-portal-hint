@@ -237,7 +237,7 @@ body { height: 100%; width: 100%; margin: 0; }
           targetMoves={boolean("Consider it moves", true)}
           rendersSmoothly={boolean("Smooth move", true)}
         >
-          <div>
+          <div data-testid="target">
             <div
               style={{
                 display: "flex",

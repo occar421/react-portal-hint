@@ -32,6 +32,14 @@ jobs:
 
       - run: yarn build
 
+      - run: yarn build-storybook
+
+      - run:
+          name: E2E Test
+          command: |
+            yarn serve-static-storybook & yarn wait-on http://localhost:8765
+            yarn cypress
+
       - persist_to_workspace:
           root: ~/repo
           paths: .
@@ -43,7 +51,6 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: yarn add -D netlify-cli
-      - run: yarn build-storybook
       - run: ./node_modules/netlify-cli/bin/run deploy -s ${NETLIFY_SITE_ID} -d storybook-static/ -a ${NETLIFY_TOKEN}
 
       - run: echo "registry=https://registry.npmjs.org/" > ~/repo/.npmrc
