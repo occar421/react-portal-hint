@@ -47,10 +47,10 @@ jobs:
           command: |
             yarn build-storybook
             apt-get install zip -y
-            zip ~/tmp/storybook-static.zip -r storybook-static
+            zip ~/storybook-static.zip -r storybook-static
 
       - store_artifacts:
-          path: ~/tmp/storybook-static.zip
+          path: ~/storybook-static.zip
           destination: storybook-static
 
       - run:
