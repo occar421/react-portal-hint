@@ -35,11 +35,21 @@ jobs:
 
       - run: yarn build-storybook
 
-      - run:
-          name: E2E Test
-          command: |
-            yarn serve-static-storybook & yarn wait-on http://localhost:8765
-            yarn cypress
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  e2e:
+    working_directory: ~/repo
+    docker:
+      - image: cypress/base:10
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run: yarn serve-static-storybook & yarn wait-on http://localhost:8765
+
+      - run: yarn cypress
 
       - persist_to_workspace:
           root: ~/repo
