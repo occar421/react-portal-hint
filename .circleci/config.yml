@@ -51,7 +51,7 @@ jobs:
 
       - store_artifacts:
           path: ~/storybook-static.zip
-          destination: storybook-static
+          destination: storybook-static.zip
 
       - run:
           name: E2E Test
