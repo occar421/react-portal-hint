@@ -78,7 +78,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: yarn add -D netlify-cli
-      - run: ./node_modules/netlify-cli/bin/run deploy -s ${NETLIFY_SITE_ID} -d storybook-static/ -a ${NETLIFY_TOKEN}
+      - run: ./node_modules/netlify-cli/bin/run deploy -s ${NETLIFY_SITE_ID} -d storybook-static/ -a ${NETLIFY_TOKEN} --prod
 
       - run: echo "registry=https://registry.npmjs.org/" > ~/repo/.npmrc
       - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/repo/.npmrc
