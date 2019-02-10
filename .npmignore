@@ -12,3 +12,6 @@ yarn.lock
 tsconfig.json
 *.tgz
 storybook-static/
+jest.config.json
+cypress.json
+cypress/
