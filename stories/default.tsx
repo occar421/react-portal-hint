@@ -310,7 +310,7 @@ stories.add("with Flexbox", () => (
       c.f. naive impl. (sizing simulation)
     </h1>
     <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
-      (The <em>wrapper</em> follows the parent flexbox option but the target{" "}
+      (The <em>wrapper</em> follows the parent flexbox option but the target
       <strong>doesn't</strong> follow.)
     </p>
     <div
@@ -375,7 +375,7 @@ stories.add("with Grid", () => (
       c.f. naive impl. (sizing simulation)
     </h1>
     <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
-      (The <em>wrapper</em> follows the parent flexbox option but the target{" "}
+      (The <em>wrapper</em> follows the parent grid option but the target
       <strong>doesn't</strong> follow.)
     </p>
     <div
