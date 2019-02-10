@@ -43,7 +43,7 @@ class TestHandler {
       .trigger("mousemove", { clientX: x, clientY: y })
       .trigger("mouseup", { force: true });
 
-    cy.wait(100); // considering animation delay
+    cy.wait(150); // considering animation delay
   }
 
   public toggleHint() {
