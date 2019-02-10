@@ -339,3 +339,68 @@ stories.add("with Flexbox", () => (
     </div>
   </div>
 ));
+
+stories.add("with Grid", () => (
+  <div>
+    <h1 style={{ marginLeft: "30px", marginBottom: "0" }}>react-portal-hint</h1>
+    <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
+      react-portal-hint doesn't wrap the HTML element. Thanks to the trick, the
+      target element will follow the parent's grid option.
+    </p>
+    <div
+      style={{
+        display: "grid",
+        gridGap: "5px",
+        gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+        paddingTop: "20px",
+        paddingLeft: "20px"
+      }}
+    >
+      {Array.from(Array(50)).map((_, i) => (
+        <Hint content="This is tooltip." key={i}>
+          <button style={{ margin: "10px" }}>
+            {i % 5 === 0 ? (
+              <>
+                {i}
+                <br />!
+              </>
+            ) : (
+              i
+            )}
+          </button>
+        </Hint>
+      ))}
+    </div>
+    <h1 style={{ marginLeft: "30px", marginBottom: "0" }}>
+      c.f. naive impl. (sizing simulation)
+    </h1>
+    <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
+      (The <em>wrapper</em> follows the parent flexbox option but the target{" "}
+      <strong>doesn't</strong> follow.)
+    </p>
+    <div
+      style={{
+        display: "grid",
+        gridGap: "5px",
+        gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+        paddingTop: "20px",
+        paddingLeft: "20px"
+      }}
+    >
+      {Array.from(Array(50)).map((_, i) => (
+        <div {/* <Hint content="This is tooltip."> */ ...{}} key={i}>
+          <button style={{ margin: "10px" }}>
+            {i % 5 === 0 ? (
+              <>
+                {i}
+                <br />!
+              </>
+            ) : (
+              i
+            )}
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+));
