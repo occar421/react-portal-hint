@@ -87,7 +87,7 @@ class HintBody extends React.Component<IProperty, State> {
     this.ro.disconnect();
   }
 
-  public render() {
+  public render(): React.ReactPortal {
     let position: { top: number; left: number } = null;
     let showingPlace = "";
     if (this.state.contentRect) {
