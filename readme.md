@@ -14,7 +14,6 @@ Tooltip/Popover which exploits React Portals. Parallel fading is enabled.
 - [x] Implement default style
 - [x] Implement port for user-defined style
 - [x] Support place options (top, button, left, right)
-- [x] Chore (rollup 1.0, use node-sass watch)
 - [x] Make portal root element configurable
 - [x] Follow target or hint content size or position (Use `ResizeObserver`)
 - [x] Support more events
@@ -22,15 +21,14 @@ Tooltip/Popover which exploits React Portals. Parallel fading is enabled.
 - [x] Implement `transform` observation (Use `setInterval`)
 - [x] Resolve margin problem
 - [x] Resolve CSS Flexbox & Grid problem
-- [x] Add integration tests
-- [x] Add E2E test
 - [x] Examples (Flexbox, CSS grid)
+- [ ] Do TODO in code
 - [ ] Accepts forwardRef
 - [ ] Accepts multiple children
 - [ ] Accepts Refs as props (exotic)
 - [ ] Configure test summary for CI
 - [ ] Well-documented documents
-- [ ] Purge `getBoundingClientRect` for the performance
+- [ ] Improve performance
 - [ ] Multi-browser support
 
 ## How to use
@@ -50,13 +48,13 @@ import "react-portal-hint/default.css";
 
 | PropertyName | Type | Default |
 |----|----|----|
-| content | `JSX.Element \| string \| ((rect: ClientRect) => JSX.Element \| string)` | N/A |
+| content | `JSX.Element ǀ string ǀ ((rect: ClientRect) => JSX.Element ǀ string)` | N/A |
 | place | (see below) | `"top"` |
 
 ```ts
 type ActualPlace = "top" | "bottom" | "left" | "right";
 type Place = ActualPlace | "column" | "row" | "start" | "end";
-declare place: Place | ActualPlace[]; // TODO: explaration
+declare place: Place | ActualPlace[]; // TODO: explanation
 ```
 
 TODO...
