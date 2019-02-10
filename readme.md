@@ -48,7 +48,18 @@ import "react-portal-hint/default.css";
 
 ## Props
 
-TODO
+| PropertyName | Type | Default |
+|----|----|----|
+| content | `JSX.Element \| string \| ((rect: ClientRect) => JSX.Element \| string)` | N/A |
+| place | (see below) | `"top"` |
+
+```ts
+type ActualPlace = "top" | "bottom" | "left" | "right";
+type Place = ActualPlace | "column" | "row" | "start" | "end";
+declare place: Place | ActualPlace[]; // TODO: explaration
+```
+
+TODO...
 
 ## License
 
