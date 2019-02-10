@@ -183,4 +183,58 @@ context("Position", () => {
       });
     });
   });
+
+  it("start", () => {
+    handler.selectPlaceOption("Start");
+
+    handler.dragAndDragTargetTo(250, 250);
+
+    handler.toggleHint();
+
+    handler.collectElements().then(({ target, hint }) => {
+      const targetTop = target.getBoundingClientRect().top;
+      const hintBottom = hint.getBoundingClientRect().bottom;
+
+      // if enough space exists, hint is above the target
+      expect(hintBottom).to.be.lessThan(targetTop);
+
+      handler.dragAndDragTargetTo(250, 50);
+
+      // tslint:disable-next-line:no-shadowed-variable
+      handler.collectElements().then(({ target, hint }) => {
+        const targetLeft = target.getBoundingClientRect().left;
+        const hintRight = hint.getBoundingClientRect().right;
+
+        // if no space, hint is on left of the target
+        expect(hintRight).to.be.lessThan(targetLeft);
+      });
+    });
+  });
+
+  it("end", () => {
+    handler.selectPlaceOption("End");
+
+    handler.dragAndDragTargetTo(250, 250);
+
+    handler.toggleHint();
+
+    handler.collectElements().then(({ target, hint }) => {
+      const targetBottom = target.getBoundingClientRect().bottom;
+      const hintTop = hint.getBoundingClientRect().top;
+
+      // if enough space exists, hint is below the target
+      expect(hintTop).to.be.greaterThan(targetBottom);
+
+      handler.dragAndDragTargetTo(250, 350);
+
+      // tslint:disable-next-line:no-shadowed-variable
+      handler.collectElements().then(({ target, hint }) => {
+        const targetRight = target.getBoundingClientRect().right;
+        const hintLeft = hint.getBoundingClientRect().left;
+
+        // if no space, hint is on right of the target
+        expect(hintLeft).to.be.greaterThan(targetRight);
+      });
+    });
+  });
 });
