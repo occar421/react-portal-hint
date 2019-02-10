@@ -60,6 +60,10 @@ jobs:
             yarn test:e2e
 
       - store_artifacts:
+          path: ~/repo/cypress/screenshots
+          destination: e2e-screenshots
+
+      - store_artifacts:
           path: ~/repo/cypress/videos
           destination: e2e-video
 
