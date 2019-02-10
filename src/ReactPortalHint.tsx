@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactIs from "react-is";
 // @ts-ignore
 import ResizeObserver from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
@@ -43,13 +44,14 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     IProperty,
     keyof typeof defaultProps
   > = defaultProps as any;
+
   public static setBaseElement(element: string | HTMLElement) {
     setBaseElement(element);
   }
 
   public readonly state: State = initialState;
 
-  private ref = React.createRef<HTMLDivElement>();
+  private targetRef = React.createRef<HTMLElement>();
 
   private ro = new ResizeObserver(entries => {
     if (
@@ -62,10 +64,10 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       this.updateRect();
     }
   });
-  private intervalHandler: NodeJS.Timeout;
+  private intervalHandler: number;
 
   public componentDidMount() {
-    this.ro.observe(this.ref.current!);
+    this.ro.observe(this.targetRef.current!);
 
     this.intervalHandler = setInterval(() => {
       if (this.props.targetMoves && this.state.rendersBody) {
@@ -83,18 +85,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   public render() {
     return (
       <>
-        <div
-          style={{ display: "inline-flex" }}
-          ref={this.ref}
-          onClick={this.onClick}
-          onDoubleClick={this.onDoubleClick}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
-          {this.props.children}
-        </div>
+        {this.renderTarget()}
         {this.state.rendersBody && this.state.rect && (
           <HintBody
             rect={this.state.rect}
@@ -121,15 +112,86 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     this.setState({
       rendersBody: true,
       showsBody: true,
-      rect: this.ref.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
+      rect: this.targetRef.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
     });
   };
   public readonly hide = () => {
     this.setState({ showsBody: false });
   };
 
+  private renderTarget() {
+    if (
+      typeof this.props.children === "undefined" ||
+      this.props.children === null
+    ) {
+      return;
+    }
+
+    const events: Partial<React.DOMAttributes<HTMLElement>> = {
+      onClick: this.onClick,
+      onDoubleClick: this.onDoubleClick,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave
+    };
+
+    switch (ReactIs.typeOf(this.props.children)) {
+      case ReactIs.Fragment:
+        throw new Error("Target with React Fragment is not supported");
+      case ReactIs.Portal:
+        throw new Error("Target with React Portal is not supported");
+      case ReactIs.Suspense:
+        throw new Error("Target with React Suspense is not supported");
+    }
+
+    if (Array.isArray(this.props.children)) {
+      throw new Error("Target with React NodeArray is not supported");
+    } else if (typeof this.props.children === "object") {
+      if ("type" in this.props.children) {
+        if (ReactIs.isLazy(this.props.children.type)) {
+          throw new Error("Target with React lazy is not supported");
+        }
+        if (
+          typeof this.props.children.type === "function" ||
+          ReactIs.isForwardRef(this.props.children)
+        ) {
+          // React Function/Class Component
+          throw Error(
+            "Target with React Function/Class Component is not supported"
+          );
+        }
+
+        if (!("children" in this.props.children)) {
+          // React element(s)
+
+          // register events and ref to the targets
+          return React.cloneElement(this.props.children, {
+            ...events,
+            ref: this.targetRef
+          });
+        }
+      }
+
+      throw Error("Unknown");
+    } else {
+      // raw text
+      return (
+        <span
+          {...events}
+          style={{ display: "inline-flex" }}
+          ref={this.targetRef}
+        >
+          {this.props.children}
+        </span>
+      );
+    }
+  }
+
   private updateRect = () => {
-    this.setState({ rect: this.ref.current!.getBoundingClientRect() });
+    if (this.targetRef.current) {
+      this.setState({ rect: this.targetRef.current.getBoundingClientRect() });
+    }
   };
 
   private onClick = () => {

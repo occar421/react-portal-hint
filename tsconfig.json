@@ -3,8 +3,10 @@
     "target": "esnext",
     "allowJs": false,
     "declaration": true,
-    "jsx": "react"
+    "jsx": "react",
+    "esModuleInterop": true,
+    "types": []
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "cypress/**/*"],
   "exclude": ["node_modules"]
 }

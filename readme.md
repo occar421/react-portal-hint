@@ -20,8 +20,16 @@ Tooltip/Popover which exploits React Portals. Parallel fading is enabled.
 - [x] Support more events
 - [x] Support more place options (combinations)
 - [x] Implement `transform` observation (Use `setInterval`)
-- [ ] Resolve margin problem
-- [ ] Resolve CSS Flexbox & Grid problem
+- [x] Resolve margin problem
+- [x] Resolve CSS Flexbox & Grid problem
+- [x] Add integration tests
+- [x] Add E2E test
+- [ ] Hooks
+- [ ] Examples (Flexbox, CSS grid)
+- [ ] Accepts forwardRef
+- [ ] Accepts multiple children
+- [ ] Accepts Refs as props (exotic)
+- [ ] Configure test summary for CI
 - [ ] Well-documented documents
 - [ ] Purge `getBoundingClientRect` for the performance
 - [ ] Multi-browser support

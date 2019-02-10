@@ -3,7 +3,10 @@ version: 2
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:10
+    - image: cypress/base:10
+      environment:
+        ## this enables colors in the output
+        TERM: xterm
 
 jobs:
   build:
@@ -15,22 +18,54 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v3-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v3-dependencies-
 
       - run: yarn install
+
+      - run: yarn cypress verify
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ~/.cache/Cypress
+          key: v3-dependencies-{{ checksum "package.json" }}
 
       - run: yarn lint
 
+      - run: yarn test:unit
+
       - run: yarn build
-      # run tests!
-      # - run: yarn test
+
+      - store_artifacts:
+          path: ~/repo/dist
+          destination: dist
+
+      - run:
+          name: Build Storybook
+          command: |
+            yarn build-storybook
+            apt-get install zip -y
+            zip ~/storybook-static.zip -r storybook-static
+
+      - store_artifacts:
+          path: ~/storybook-static.zip
+          destination: storybook-static.zip
+
+      - run:
+          name: E2E Test
+          command: |
+            yarn serve-static-storybook --silent & yarn wait-on http://localhost:8765
+            yarn test:e2e
+
+      - store_artifacts:
+          path: ~/repo/cypress/screenshots
+          destination: e2e-screenshots
+
+      - store_artifacts:
+          path: ~/repo/cypress/videos
+          destination: e2e-video
 
       - persist_to_workspace:
           root: ~/repo
@@ -43,7 +78,6 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: yarn add -D netlify-cli
-      - run: yarn build-storybook
       - run: ./node_modules/netlify-cli/bin/run deploy -s ${NETLIFY_SITE_ID} -d storybook-static/ -a ${NETLIFY_TOKEN}
 
       - run: echo "registry=https://registry.npmjs.org/" > ~/repo/.npmrc
