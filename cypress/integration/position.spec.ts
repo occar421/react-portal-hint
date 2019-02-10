@@ -14,48 +14,66 @@ function generateStoryUrl(
   )}&selectedStory=${encodeURIComponent(story)}`;
 }
 
-function selectPlace(place: string) {
-  cy.contains("Knobs").click();
-  cy.get(`[value="Left > Top > Right (custom fallback)"]`)
-    .parent()
-    .select(place);
-}
+class TestHandler {
+  private $body: JQuery<HTMLElement | Text | Comment>;
 
-function showHintAndCollectElement() {
-  return cy.get("#storybook-preview-iframe").then($iframe => {
-    const $body = $iframe.contents().find("body");
+  public start() {
+    cy.visit(generateStoryUrl("Default", "place"));
+    cy.get("#storybook-preview-iframe").then($iframe => {
+      this.$body = $iframe.contents().find("body");
+      if (!this.$body) {
+        throw new Error(
+          "Failed to start due to iframe in Storybook not found."
+        );
+      }
+    });
+  }
 
-    cy.wrap($body)
+  public selectPlaceOption(place: string) {
+    cy.contains("Knobs").click();
+    cy.get(`[value="Left > Top > Right (custom fallback)"]`)
+      .parent()
+      .select(place);
+  }
+
+  public toggleHint() {
+    cy.wrap(this.$body)
       .contains("Toggle")
       .click();
+  }
 
+  public collectElements(): Cypress.Chainable<{
+    target: HTMLElement;
+    hint: HTMLElement;
+  }> {
     return cy
-      .wrap($body)
+      .wrap(this.$body)
       .find(`[data-testid="target"]`)
       .then($target => {
-        const target = $target.get(0);
-
         return cy
-          .wrap($body)
-          .find(".react-portal-hint__body")
-          .then($hint => {
-            const hint = $hint.get(0);
-
-            return { target, hint };
-          });
+          .wrap(this.$body)
+          .find(`.react-portal-hint__body`)
+          .then($hint => ({
+            target: $target.get(0),
+            hint: $hint.get(0)
+          }));
       });
-  });
+  }
 }
 
 context("Position", () => {
+  const handler = new TestHandler();
+
   beforeEach(() => {
-    cy.visit(generateStoryUrl("Default", "place"));
+    handler.start();
   });
 
   it("top", () => {
-    selectPlace("Top");
+    handler.selectPlaceOption("Top");
 
-    showHintAndCollectElement().then(({ target, hint }) => {
+    handler.toggleHint();
+
+    handler.collectElements().then(({ target, hint }) => {
       const targetTop = target.getBoundingClientRect().top;
       const hintBottom = hint.getBoundingClientRect().bottom;
 
@@ -64,9 +82,11 @@ context("Position", () => {
   });
 
   it("right", () => {
-    selectPlace("Right");
+    handler.selectPlaceOption("Right");
 
-    showHintAndCollectElement().then(({ target, hint }) => {
+    handler.toggleHint();
+
+    handler.collectElements().then(({ target, hint }) => {
       const targetRight = target.getBoundingClientRect().right;
       const hintLeft = hint.getBoundingClientRect().left;
 
@@ -75,9 +95,11 @@ context("Position", () => {
   });
 
   it("bottom", () => {
-    selectPlace("Bottom");
+    handler.selectPlaceOption("Bottom");
 
-    showHintAndCollectElement().then(({ target, hint }) => {
+    handler.toggleHint();
+
+    handler.collectElements().then(({ target, hint }) => {
       const targetBottom = target.getBoundingClientRect().bottom;
       const hintTop = hint.getBoundingClientRect().top;
 
@@ -86,9 +108,11 @@ context("Position", () => {
   });
 
   it("left", () => {
-    selectPlace("Left");
+    handler.selectPlaceOption("Left");
 
-    showHintAndCollectElement().then(({ target, hint }) => {
+    handler.toggleHint();
+
+    handler.collectElements().then(({ target, hint }) => {
       const targetLeft = target.getBoundingClientRect().left;
       const hintRight = hint.getBoundingClientRect().right;
 
