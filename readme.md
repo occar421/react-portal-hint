@@ -1,8 +1,8 @@
 # react-portal-hint
 
-This library is in the demonstration phase. Everything is subject to change.
+This library is in the alpha phase. Many things are subject to change.
 
-Tooltip/Popover which exploits React Portals. Parallel fading is enabled.  
+The intuitive, efficient, configurable Tooltip/Popover which exploits React Portals. Parallel fading is enabled.  
 [Demo](https://react-portal-hint-demo.netlify.com/)
 
 [![CircleCI](https://circleci.com/gh/occar421/react-portal-hint.svg?style=svg)](https://circleci.com/gh/occar421/react-portal-hint)
