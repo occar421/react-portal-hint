@@ -108,11 +108,11 @@ describe("triggers", () => {
 
     expect(queryByText("This is tooltip.")).toBeNull();
 
-    ref.current.show();
+    ref.current!.show();
 
     expect(getByText("This is tooltip.")).toBeDefined();
 
-    ref.current.hide();
+    ref.current!.hide();
     await fireEvent.transitionEnd(getByText("This is tooltip."));
 
     expect(queryByText("This is tooltip.")).toBeNull();

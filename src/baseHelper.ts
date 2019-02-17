@@ -1,4 +1,4 @@
-let baseElement: HTMLElement = document.querySelector("body");
+let baseElement: HTMLElement | null = document.querySelector("body");
 
 export function set(element: string | HTMLElement) {
   if (typeof element === "string") {
@@ -12,5 +12,5 @@ export function set(element: string | HTMLElement) {
 }
 
 export function get(): HTMLElement {
-  return baseElement;
+  return baseElement!;
 }

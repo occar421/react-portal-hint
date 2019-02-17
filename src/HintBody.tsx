@@ -55,7 +55,7 @@ function calculatePosition(
 } | null {
   let top: number | null = null;
   let left: number | null = null;
-  let showingPlace: ActualPlace | null;
+  let showingPlace: ActualPlace | null = null;
 
   for (const place of placeAttempts) {
     showingPlace = place;
@@ -148,7 +148,7 @@ class HintBody extends React.Component<IProperty, State> {
 
   private ref = React.createRef<HTMLDivElement>();
 
-  private modalRoot: HTMLElement = null;
+  private modalRoot: HTMLElement | null = null;
 
   private ro = new ResizeObserver((entries: ResizeObserverEntry[]) => {
     if (entries && entries[0]) {
@@ -168,6 +168,10 @@ class HintBody extends React.Component<IProperty, State> {
   }
 
   public componentDidMount() {
+    if (this.modalRoot === null) {
+      throw new Error("Modal root element is invalid.");
+    }
+
     this.modalRoot.appendChild(this.el);
 
     this.ro.observe(this.ref.current!);
@@ -180,13 +184,13 @@ class HintBody extends React.Component<IProperty, State> {
   }
 
   public componentWillUnmount() {
-    this.modalRoot.removeChild(this.el);
+    this.modalRoot!.removeChild(this.el);
 
     this.ro.disconnect();
   }
 
   public render(): React.ReactPortal {
-    let position: { top: number; left: number } = null;
+    let position: { top: number; left: number } | null = null;
     let showingPlace = "";
     if (this.state.contentRect) {
       const attempts: ActualPlace[] =
@@ -194,14 +198,17 @@ class HintBody extends React.Component<IProperty, State> {
           ? this.props.place
           : placeToAttempts(this.props.place);
 
-      const { place, ...pos } = calculatePosition(
+      const result = calculatePosition(
         attempts,
         this.props.rect,
         this.state.contentRect,
         this.props.safetyMargin
       );
-      position = pos;
-      showingPlace = place;
+      if (result !== null) {
+        const { place, ...pos } = result;
+        position = pos;
+        showingPlace = place;
+      }
     }
 
     return ReactDOM.createPortal(

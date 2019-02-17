@@ -64,7 +64,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
       this.updateRect();
     }
   });
-  private intervalHandler: number;
+  private intervalHandler: number | null = null;
 
   public componentDidMount() {
     this.ro.observe(this.targetRef.current!);
@@ -79,7 +79,9 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   public componentWillUnmount() {
     this.ro.disconnect();
 
-    clearInterval(this.intervalHandler);
+    if (this.intervalHandler !== null) {
+      clearInterval(this.intervalHandler);
+    }
   }
 
   public render() {

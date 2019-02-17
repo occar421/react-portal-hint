@@ -15,7 +15,7 @@ function generateStoryUrl(
 }
 
 class TestHandler {
-  private $body: JQuery<HTMLElement | Text | Comment>;
+  private $body: JQuery<HTMLElement | Text | Comment> = {} as any; // this should be prepared
 
   public start() {
     cy.visit(generateStoryUrl("Default", "place"));

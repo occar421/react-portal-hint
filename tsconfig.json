@@ -5,9 +5,8 @@
     "declaration": true,
     "jsx": "react",
     "esModuleInterop": true,
-    "noImplicitThis": true,
+    "strict": true,
     "noImplicitReturns": true,
-    "noImplicitAny": true,
     "types": [],
     "skipLibCheck": true
   },
