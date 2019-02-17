@@ -24,6 +24,7 @@ The intuitive, efficient, configurable Tooltip/Popover which exploits React Port
 - [x] Examples (Flexbox, CSS grid)
 - [ ] Performance improvement using Hooks
 - [ ] Do TODO in code
+- [ ] Enable ts strict options
 - [ ] Accepts forwardRef
 - [ ] Accepts multiple children
 - [ ] content validation
