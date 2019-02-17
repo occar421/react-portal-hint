@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
+    "noImplicitAny": true,
     "types": [],
     "skipLibCheck": true
   },

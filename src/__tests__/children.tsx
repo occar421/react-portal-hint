@@ -7,7 +7,9 @@ import Hint from "../index";
 
 afterEach(cleanup);
 
-const SubFunctionComponent = ({ children }) => <div>{children}</div>;
+const SubFunctionComponent = (props: { children: React.ReactNode }) => (
+  <div>{props.children}</div>
+);
 
 class SubClassComponent extends React.Component {
   public render() {

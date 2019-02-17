@@ -1,6 +1,6 @@
 import * as React from "react";
 // @ts-ignore
-import ResizeObserver from "resize-observer-polyfill";
+import ResizeObserver, { ResizeObserverEntry } from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
 import HintBody from "./HintBody";
 import HintTarget from "./HintTarget";
@@ -53,7 +53,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
 
   private targetRef = React.createRef<HTMLElement>();
 
-  private ro = new ResizeObserver(entries => {
+  private ro = new ResizeObserver((entries: ResizeObserverEntry[]) => {
     if (
       !this.props.targetMoves &&
       this.state.rendersBody &&

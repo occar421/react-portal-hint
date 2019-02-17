@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 // @ts-ignore
-import ResizeObserver from "resize-observer-polyfill";
+import ResizeObserver, { ResizeObserverEntry } from "resize-observer-polyfill";
 import { get as getBaseElement } from "./baseHelper";
 import { ActualPlace, Place } from "./models";
 
@@ -148,9 +148,9 @@ class HintBody extends React.Component<IProperty, State> {
 
   private ref = React.createRef<HTMLDivElement>();
 
-  private modalRoot = null;
+  private modalRoot: HTMLElement = null;
 
-  private ro = new ResizeObserver(entries => {
+  private ro = new ResizeObserver((entries: ResizeObserverEntry[]) => {
     if (entries && entries[0]) {
       // too problematic code. ResizeObserver's rect didn't work well
       this.setState({
@@ -160,7 +160,7 @@ class HintBody extends React.Component<IProperty, State> {
     }
   });
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
 
     this.el.setAttribute("style", "display: inline-block; float: left");
