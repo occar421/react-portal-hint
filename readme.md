@@ -22,9 +22,12 @@ The intuitive, efficient, configurable Tooltip/Popover which exploits React Port
 - [x] Resolve margin problem
 - [x] Resolve CSS Flexbox & Grid problem
 - [x] Examples (Flexbox, CSS grid)
+- [ ] Performance improvement using Hooks
 - [ ] Do TODO in code
 - [ ] Accepts forwardRef
 - [ ] Accepts multiple children
+- [ ] content validation
+- [ ] Example with custom stylesheet
 - [ ] Accepts Refs as props (exotic)
 - [ ] Configure test summary for CI
 - [ ] Well-documented documents
