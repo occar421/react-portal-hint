@@ -91,30 +91,4 @@ describe("triggers", () => {
 
     expect(queryByText("This is tooltip.")).toBeNull();
   });
-
-  it("shows tooltip depends on developer's order", async () => {
-    const ref = React.createRef<Hint>();
-
-    const { getByText, queryByText } = render(
-      <Hint
-        content="This is tooltip."
-        usesTransition={true}
-        events={["focus"]}
-        ref={ref}
-      >
-        Content
-      </Hint>
-    );
-
-    expect(queryByText("This is tooltip.")).toBeNull();
-
-    ref.current.show();
-
-    expect(getByText("This is tooltip.")).toBeDefined();
-
-    ref.current.hide();
-    await fireEvent.transitionEnd(getByText("This is tooltip."));
-
-    expect(queryByText("This is tooltip.")).toBeNull();
-  });
 });
