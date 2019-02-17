@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as ReactDOM from "react-dom";
 // @ts-ignore
 import ResizeObserver from "resize-observer-polyfill";
@@ -17,13 +17,6 @@ interface IProperty {
   usesTransition: boolean;
   onDisappeared?(): void;
 }
-
-const initialState = {
-  contentRect: null as ClientRect | null,
-  onceRendered: false,
-  transformed: false
-};
-type State = Readonly<typeof initialState>;
 
 function placeToAttempts(place: Place): ActualPlace[] {
   switch (place) {
@@ -141,113 +134,118 @@ function calculatePosition(
     : null;
 }
 
-class HintBody extends React.Component<IProperty, State> {
-  public readonly state: State = initialState;
+const HintBody: React.FunctionComponent<IProperty> = ({
+  rect,
+  place,
+  safetyMargin,
+  rendersSmoothly,
+  shows,
+  bodyClass,
+  shownClass,
+  hiddenClass,
+  usesTransition,
+  onDisappeared,
+  children
+}) => {
+  const [contentRect, setContentRect] = useState<ClientRect | null>(null);
+  const [hasRendered, setHasRendered] = useState(false);
+  const [hasTransformed, setHasTransformed] = useState(false);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
-  private el = document.createElement("div");
+  // resize observer
+  useEffect(() => {
+    const ro: ResizeObserver = new ResizeObserver(entries => {
+      if (entries && entries[0]) {
+        // too problematic code. ResizeObserver's rect didn't work well
+        setContentRect(bodyRef.current!.getBoundingClientRect());
+        setHasRendered(true);
+      }
+    });
 
-  private ref = React.createRef<HTMLDivElement>();
+    ro.observe(bodyRef.current!);
 
-  private modalRoot = null;
+    return () => {
+      ro.disconnect();
+    };
+  }, []);
 
-  private ro = new ResizeObserver(entries => {
-    if (entries && entries[0]) {
-      // too problematic code. ResizeObserver's rect didn't work well
-      this.setState({
-        contentRect: this.ref.current!.getBoundingClientRect(),
-        onceRendered: true
-      });
+  const [element] = useState(() => {
+    const el = document.createElement("div");
+    el.setAttribute("style", "display: inline-block; float: left");
+    return el;
+  });
+  const [modalRoot] = useState(getBaseElement());
+
+  // real mount and unmount
+  useEffect(() => {
+    modalRoot.appendChild(element);
+
+    return () => {
+      modalRoot.removeChild(element);
+    };
+  }, []);
+
+  // delayed state initialize
+  useEffect(() => {
+    if (rendersSmoothly) {
+      setTimeout(() => {
+        setHasTransformed(true);
+      }, 50);
     }
   });
 
-  constructor(props) {
-    super(props);
-
-    this.el.setAttribute("style", "display: inline-block; float: left");
-    this.modalRoot = getBaseElement();
-  }
-
-  public componentDidMount() {
-    this.modalRoot.appendChild(this.el);
-
-    this.ro.observe(this.ref.current!);
-
-    if (this.props.rendersSmoothly) {
-      setTimeout(() => {
-        this.setState({ transformed: true });
-      }, 50);
+  const onTransitionEnd = useCallback(() => {
+    if (usesTransition && !shows && onDisappeared) {
+      onDisappeared();
     }
-  }
+  }, [usesTransition, shows, onDisappeared]);
 
-  public componentWillUnmount() {
-    this.modalRoot.removeChild(this.el);
+  let position: { top: number; left: number } = null;
+  let showingPlace = "";
+  if (contentRect) {
+    const attempts: ActualPlace[] =
+      place instanceof Array ? place : placeToAttempts(place);
 
-    this.ro.disconnect();
-  }
-
-  public render(): React.ReactPortal {
-    let position: { top: number; left: number } = null;
-    let showingPlace = "";
-    if (this.state.contentRect) {
-      const attempts: ActualPlace[] =
-        this.props.place instanceof Array
-          ? this.props.place
-          : placeToAttempts(this.props.place);
-
-      const { place, ...pos } = calculatePosition(
-        attempts,
-        this.props.rect,
-        this.state.contentRect,
-        this.props.safetyMargin
-      );
-      position = pos;
-      showingPlace = place;
-    }
-
-    return ReactDOM.createPortal(
-      <div
-        ref={this.ref}
-        style={{
-          display: "inline-flex",
-          position: "absolute",
-          left: `0`,
-          top: `0`,
-          transform: position
-            ? `translate(${position.left}px,${position.top}px)`
-            : undefined,
-          transition:
-            this.props.rendersSmoothly && this.state.transformed
-              ? "transform 0.05s ease-in-out"
-              : undefined
-        }}
-      >
-        <div
-          onTransitionEnd={this.onTransitionEnd}
-          className={[
-            this.props.bodyClass,
-            this.props.shows &&
-            (!this.props.usesTransition || this.state.onceRendered)
-              ? this.props.shownClass
-              : this.props.hiddenClass,
-            showingPlace
-          ].join(" ")}
-        >
-          {this.props.children}
-        </div>
-      </div>,
-      this.el
+    const { place: pla, ...pos } = calculatePosition(
+      attempts,
+      rect,
+      contentRect,
+      safetyMargin
     );
+    position = pos;
+    showingPlace = pla;
   }
 
-  private onTransitionEnd = () => {
-    if (
-      this.props.usesTransition &&
-      !this.props.shows &&
-      this.props.onDisappeared
-    ) {
-      this.props.onDisappeared();
-    }
-  };
-}
+  return ReactDOM.createPortal(
+    <div
+      ref={bodyRef}
+      style={{
+        display: "inline-flex",
+        position: "absolute",
+        left: `0`,
+        top: `0`,
+        transform: position
+          ? `translate(${position.left}px,${position.top}px)`
+          : undefined,
+        transition:
+          rendersSmoothly && hasTransformed
+            ? "transform 0.05s ease-in-out"
+            : undefined
+      }}
+    >
+      <div
+        onTransitionEnd={onTransitionEnd}
+        className={[
+          bodyClass,
+          shows && (!usesTransition || hasRendered) ? shownClass : hiddenClass,
+          showingPlace
+        ].join(" ")}
+      >
+        {children}
+      </div>
+    </div>,
+    element
+  );
+};
 
 export default HintBody;
