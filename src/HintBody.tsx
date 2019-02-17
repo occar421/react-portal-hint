@@ -43,6 +43,104 @@ function placeToAttempts(place: Place): ActualPlace[] {
   }
 }
 
+function calculatePosition(
+  placeAttempts: ActualPlace[],
+  targetRect: ClientRect,
+  contentRect: ClientRect,
+  safetyMargin: number
+): {
+  top: number;
+  left: number;
+  place: ActualPlace;
+} | null {
+  let top: number | null = null;
+  let left: number | null = null;
+  let showingPlace: ActualPlace | null;
+
+  for (const place of placeAttempts) {
+    showingPlace = place;
+    if (place === "top") {
+      const targetHorizontalCenter = (targetRect.left + targetRect.right) / 2;
+      const targetTop = targetRect.top;
+
+      const contentWidth = contentRect.width;
+      const contentHeight = contentRect.height;
+
+      left = targetHorizontalCenter - contentWidth / 2;
+      top = targetTop - contentHeight;
+
+      // check if valid position
+      if (
+        safetyMargin <= top &&
+        safetyMargin <= left &&
+        left + contentWidth + safetyMargin < window.innerWidth
+      ) {
+        break;
+      }
+    } else if (place === "bottom") {
+      const targetBottom = targetRect.bottom;
+      const targetHorizontalCenter = (targetRect.left + targetRect.right) / 2;
+
+      const contentWidth = contentRect.width;
+      const contentHeight = contentRect.height;
+
+      left = targetHorizontalCenter - contentWidth / 2;
+      top = targetBottom;
+
+      // check if valid position
+      if (
+        top + contentHeight + safetyMargin < window.innerHeight &&
+        safetyMargin <= left &&
+        left + contentWidth + safetyMargin < window.innerWidth
+      ) {
+        break;
+      }
+    } else if (place === "left") {
+      const targetLeft = targetRect.left;
+      const targetVerticalCenter = (targetRect.top + targetRect.bottom) / 2;
+
+      const contentWidth = contentRect.width;
+      const contentHeight = contentRect.height;
+
+      left = targetLeft - contentWidth;
+      top = targetVerticalCenter - contentHeight / 2;
+
+      // check if valid position
+      if (
+        safetyMargin <= left &&
+        safetyMargin <= top &&
+        top + contentHeight + safetyMargin < window.innerHeight
+      ) {
+        break;
+      }
+    } else if (place === "right") {
+      const targetRight = targetRect.right;
+      const targetVerticalCenter = (targetRect.top + targetRect.bottom) / 2;
+
+      const contentWidth = contentRect.width;
+      const contentHeight = contentRect.height;
+
+      left = targetRight;
+      top = targetVerticalCenter - contentHeight / 2;
+
+      // check if valid position
+      if (
+        left + contentWidth + safetyMargin < window.innerWidth &&
+        safetyMargin <= top &&
+        top + contentHeight + safetyMargin < window.innerHeight
+      ) {
+        break;
+      }
+    } else {
+      throw new Error("Invalid argument `place`.");
+    }
+  }
+
+  return top !== null && left !== null && showingPlace !== null
+    ? { top, left, place: showingPlace }
+    : null;
+}
+
 class HintBody extends React.Component<IProperty, State> {
   public readonly state: State = initialState;
 
@@ -96,102 +194,14 @@ class HintBody extends React.Component<IProperty, State> {
           ? this.props.place
           : placeToAttempts(this.props.place);
 
-      for (const place of attempts) {
-        showingPlace = place;
-        if (place === "top") {
-          const targetHorizontalCenter =
-            (this.props.rect.left + this.props.rect.right) / 2;
-          const targetTop = this.props.rect.top;
-
-          const contentWidth = this.state.contentRect.width;
-          const contentHeight = this.state.contentRect.height;
-
-          position = {
-            left: targetHorizontalCenter - contentWidth / 2,
-            top: targetTop - contentHeight
-          };
-
-          // check if valid position
-          if (
-            this.props.safetyMargin <= position.top &&
-            this.props.safetyMargin <= position.left &&
-            position.left + contentWidth + this.props.safetyMargin <
-              window.innerWidth
-          ) {
-            break;
-          }
-        } else if (place === "bottom") {
-          const targetBottom = this.props.rect.bottom;
-          const targetHorizontalCenter =
-            (this.props.rect.left + this.props.rect.right) / 2;
-
-          const contentWidth = this.state.contentRect.width;
-          const contentHeight = this.state.contentRect.height;
-
-          position = {
-            left: targetHorizontalCenter - contentWidth / 2,
-            top: targetBottom
-          };
-
-          // check if valid position
-          if (
-            position.top + contentHeight + this.props.safetyMargin <
-              window.innerHeight &&
-            this.props.safetyMargin <= position.left &&
-            position.left + contentWidth + this.props.safetyMargin <
-              window.innerWidth
-          ) {
-            break;
-          }
-        } else if (place === "left") {
-          const targetLeft = this.props.rect.left;
-          const targetVerticalCenter =
-            (this.props.rect.top + this.props.rect.bottom) / 2;
-
-          const contentWidth = this.state.contentRect.width;
-          const contentHeight = this.state.contentRect.height;
-
-          position = {
-            left: targetLeft - contentWidth,
-            top: targetVerticalCenter - contentHeight / 2
-          };
-
-          // check if valid position
-          if (
-            this.props.safetyMargin <= position.left &&
-            this.props.safetyMargin <= position.top &&
-            position.top + contentHeight + this.props.safetyMargin <
-              window.innerHeight
-          ) {
-            break;
-          }
-        } else if (place === "right") {
-          const targetRight = this.props.rect.right;
-          const targetVerticalCenter =
-            (this.props.rect.top + this.props.rect.bottom) / 2;
-
-          const contentWidth = this.state.contentRect.width;
-          const contentHeight = this.state.contentRect.height;
-
-          position = {
-            left: targetRight,
-            top: targetVerticalCenter - contentHeight / 2
-          };
-
-          // check if valid position
-          if (
-            position.left + contentWidth + this.props.safetyMargin <
-              window.innerWidth &&
-            this.props.safetyMargin <= position.top &&
-            position.top + contentHeight + this.props.safetyMargin <
-              window.innerHeight
-          ) {
-            break;
-          }
-        } else {
-          throw new Error("Invalid argument `place`.");
-        }
-      }
+      const { place, ...pos } = calculatePosition(
+        attempts,
+        this.props.rect,
+        this.state.contentRect,
+        this.props.safetyMargin
+      );
+      position = pos;
+      showingPlace = place;
     }
 
     return ReactDOM.createPortal(
