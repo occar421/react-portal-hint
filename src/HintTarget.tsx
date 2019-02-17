@@ -14,7 +14,7 @@ const HintTarget = React.forwardRef<
   >
 >(({ children, ...events }, ref) => {
   if (typeof children === "undefined" || children === null) {
-    return;
+    return null;
   }
 
   switch (ReactIs.typeOf(children)) {

@@ -6,6 +6,7 @@
     "jsx": "react",
     "esModuleInterop": true,
     "noImplicitThis": true,
+    "noImplicitReturns": true,
     "types": [],
     "skipLibCheck": true
   },
