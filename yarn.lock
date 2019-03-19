@@ -8624,10 +8624,10 @@ react-style-proptype@^3.0.0:
   dependencies:
     prop-types "^15.5.4"
 
-react-testing-library@^5.5.4:
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-5.8.0.tgz#b5163758b1ddfd2e15c3cd2790562a527a1bb0a5"
-  integrity sha512-cYOX8aUKea5ojFVXkhLbNEAq86nYqBlhKulJI/0v8JfwWyQm+kbyNKFfyci6b2qI4KUEvBYZKWx+zZWeYrYOOA==
+react-testing-library@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-6.0.1.tgz#0ddf155cb609529e37359a82cc63eb3f830397fd"
+  integrity sha512-Asyrmdj059WnD8q4pVsKoPtvWfXEk+OCCNKSo9bh5tZ0pb80iXvkr4oppiL8H2qWL+MJUV2PTMneHYxsTeAa/A==
   dependencies:
     "@babel/runtime" "^7.3.1"
     dom-testing-library "^3.13.1"
