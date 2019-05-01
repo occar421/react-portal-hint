@@ -1,4 +1,5 @@
-module.exports = (baseConfig, env, config) => {
+module.exports = (baseConfig, env) => {
+  const config = baseConfig.config;
   config.module.rules.push({
     test: /\.(ts|tsx)$/,
     use: [
