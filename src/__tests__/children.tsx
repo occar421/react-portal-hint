@@ -7,19 +7,22 @@ import Hint from "../index";
 
 afterEach(cleanup);
 
-const SubFunctionComponent = (props: { children: React.ReactNode }) => (
-  <div>{props.children}</div>
+const SubFunctionComponent: React.FunctionComponent = ({ children }) => (
+  <div>{children}</div>
 );
 
 class SubClassComponent extends React.Component {
-  public render() {
+  public render(): React.ReactNode {
     return <div>{this.props.children}</div>;
   }
 }
 
-const SubForwardRefComponent: any = React.forwardRef(
-  ({ children }, ref: any) => <div ref={ref}>{children}</div>
-);
+const SubForwardRefComponent = React.forwardRef<
+  HTMLDivElement,
+  { children?: React.ReactNode }
+>(function Core({ children }, ref) {
+  return <div ref={ref}>{children}</div>;
+});
 
 const SubLazyComponent = React.lazy(() =>
   Promise.resolve({ default: SubFunctionComponent })

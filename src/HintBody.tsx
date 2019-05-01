@@ -5,7 +5,7 @@ import ResizeObserver, { ResizeObserverEntry } from "resize-observer-polyfill";
 import { get as getBaseElement } from "./baseHelper";
 import { ActualPlace, Place } from "./models";
 
-interface IProperty {
+interface Props {
   rect: Readonly<ClientRect>;
   place: Place | ActualPlace[];
   safetyMargin: number;
@@ -141,7 +141,7 @@ function calculatePosition(
     : null;
 }
 
-class HintBody extends React.Component<IProperty, State> {
+class HintBody extends React.Component<Props, State> {
   public readonly state: State = initialState;
 
   private el = document.createElement("div");
@@ -151,30 +151,33 @@ class HintBody extends React.Component<IProperty, State> {
   private modalRoot: HTMLElement | null = null;
 
   private ro = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-    if (entries && entries[0]) {
+    if (entries && entries[0] && this.ref.current) {
       // too problematic code. ResizeObserver's rect didn't work well
       this.setState({
-        contentRect: this.ref.current!.getBoundingClientRect(),
+        contentRect: this.ref.current.getBoundingClientRect(),
         onceRendered: true
       });
     }
   });
 
-  constructor(props: any) {
+  public constructor(props: Props) {
     super(props);
 
     this.el.setAttribute("style", "display: inline-block; float: left");
     this.modalRoot = getBaseElement();
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     if (this.modalRoot === null) {
       throw new Error("Modal root element is invalid.");
+    }
+    if (!this.ref.current) {
+      throw new Error("Reference to the component is invalid.");
     }
 
     this.modalRoot.appendChild(this.el);
 
-    this.ro.observe(this.ref.current!);
+    this.ro.observe(this.ref.current);
 
     if (this.props.rendersSmoothly) {
       setTimeout(() => {
@@ -183,8 +186,10 @@ class HintBody extends React.Component<IProperty, State> {
     }
   }
 
-  public componentWillUnmount() {
-    this.modalRoot!.removeChild(this.el);
+  public componentWillUnmount(): void {
+    if (this.modalRoot) {
+      this.modalRoot.removeChild(this.el);
+    }
 
     this.ro.disconnect();
   }

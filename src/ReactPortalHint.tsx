@@ -6,7 +6,7 @@ import HintBody from "./HintBody";
 import HintTarget from "./HintTarget";
 import { ActualPlace, Event, Place } from "./models";
 
-interface IProperty {
+interface Props {
   place: Place | ActualPlace[];
   safetyMarginOfHint: number;
   centralizes: boolean; // TODO implement this feature: centralize hint position at the edge
@@ -27,7 +27,7 @@ const initialState = {
 };
 type State = Readonly<typeof initialState>;
 
-const defaultProps: Partial<IProperty> = {
+const defaultProps: Partial<Props> = {
   place: "top",
   centralizes: true,
   bodyClass: "react-portal-hint__body",
@@ -39,13 +39,13 @@ const defaultProps: Partial<IProperty> = {
   keepsOriginalPlace: false
 };
 
-class ReactPortalHint extends React.Component<IProperty, State> {
-  public static defaultProps: Pick<
-    IProperty,
+class ReactPortalHint extends React.Component<Props, State> {
+  public static defaultProps = defaultProps as Pick<
+    Props,
     keyof typeof defaultProps
-  > = defaultProps as any;
+  >;
 
-  public static setBaseElement(element: string | HTMLElement) {
+  public static setBaseElement(element: string | HTMLElement): void {
     setBaseElement(element);
   }
 
@@ -66,8 +66,12 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   });
   private intervalHandler: number | null = null;
 
-  public componentDidMount() {
-    this.ro.observe(this.targetRef.current!);
+  public componentDidMount(): void {
+    if (!this.targetRef.current) {
+      throw new Error("Reference to the component is invalid.");
+    }
+
+    this.ro.observe(this.targetRef.current);
 
     this.intervalHandler = setInterval(() => {
       if (this.props.targetMoves && this.state.rendersBody) {
@@ -76,7 +80,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     }, 50);
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount(): void {
     this.ro.disconnect();
 
     if (this.intervalHandler !== null) {
@@ -84,7 +88,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
     }
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <>
         <HintTarget
@@ -95,8 +99,9 @@ class ReactPortalHint extends React.Component<IProperty, State> {
           onBlur={this.onBlur}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
-          children={this.props.children}
-        />
+        >
+          {this.props.children}
+        </HintTarget>
         {this.state.rendersBody && this.state.rect && (
           <HintBody
             rect={this.state.rect}
@@ -107,7 +112,7 @@ class ReactPortalHint extends React.Component<IProperty, State> {
             bodyClass={this.props.bodyClass}
             shownClass={"shown"}
             hiddenClass={"hidden"}
-            usesTransition={this.props.usesTransition === true}
+            usesTransition={this.props.usesTransition}
             onDisappeared={this.onDisappeared}
           >
             {typeof this.props.content === "function"
@@ -120,10 +125,14 @@ class ReactPortalHint extends React.Component<IProperty, State> {
   }
 
   public readonly show = () => {
+    if (!this.targetRef.current) {
+      throw new Error("Reference to the component is invalid.");
+    }
+
     this.setState({
       rendersBody: true,
       showsBody: true,
-      rect: this.targetRef.current!.getBoundingClientRect() // if observer works in all situation, this is not necessary
+      rect: this.targetRef.current.getBoundingClientRect() // if observer works in all situation, this is not necessary
     });
   };
   public readonly hide = () => {

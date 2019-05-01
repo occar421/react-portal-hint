@@ -10,8 +10,10 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const wp = require("@cypress/webpack-preprocessor");
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config

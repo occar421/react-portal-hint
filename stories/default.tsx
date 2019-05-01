@@ -181,6 +181,7 @@ stories.add("events", () => {
         &nbsp;
         <button
           onClick={() => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             ref.current!.show();
           }}
         >
@@ -188,6 +189,7 @@ stories.add("events", () => {
         </button>
         <button
           onClick={() => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             ref.current!.hide();
           }}
         >
@@ -261,6 +263,7 @@ body { height: 100%; width: 100%; margin: 0; }
                 justifyContent: "center"
               }}
               onClick={() => {
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const inst = refForPlace.current!;
                 inst.state.showsBody ? inst.hide() : inst.show();
               }}
@@ -279,8 +282,9 @@ stories.add("with Flexbox", () => (
   <div>
     <h1 style={{ marginLeft: "30px", marginBottom: "0" }}>react-portal-hint</h1>
     <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
-      react-portal-hint doesn't wrap the HTML element. Thanks to the trick, the
-      target element will follow the parent's flexbox option.
+      {
+        "react-portal-hint doesn't wrap the HTML element. Thanks to the trick, the target element will follow the parent's flexbox option."
+      }
     </p>
     <div
       style={{
@@ -311,7 +315,7 @@ stories.add("with Flexbox", () => (
     </h1>
     <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
       (The <em>wrapper</em> follows the parent flexbox option but the target
-      <strong>doesn't</strong> follow.)
+      <strong>{"doesn't"}</strong> follow.)
     </p>
     <div
       style={{
@@ -344,8 +348,9 @@ stories.add("with Grid", () => (
   <div>
     <h1 style={{ marginLeft: "30px", marginBottom: "0" }}>react-portal-hint</h1>
     <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
-      react-portal-hint doesn't wrap the HTML element. Thanks to the trick, the
-      target element will follow the parent's grid option.
+      {
+        "react-portal-hint doesn't wrap the HTML element. Thanks to the trick, the target element will follow the parent's grid option."
+      }
     </p>
     <div
       style={{
@@ -376,7 +381,7 @@ stories.add("with Grid", () => (
     </h1>
     <p style={{ marginLeft: "30px", marginRight: "30px", marginBottom: "0" }}>
       (The <em>wrapper</em> follows the parent grid option but the target
-      <strong>doesn't</strong> follow.)
+      <strong>{"doesn't"}</strong> follow.)
     </p>
     <div
       style={{

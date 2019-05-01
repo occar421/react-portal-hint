@@ -106,13 +106,17 @@ describe("triggers", () => {
       </Hint>
     );
 
+    expect(ref.current).not.toBeNull();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const refCurrent = ref.current!;
+
     expect(queryByText("This is tooltip.")).toBeNull();
 
-    ref.current!.show();
+    refCurrent.show();
 
     expect(getByText("This is tooltip.")).toBeDefined();
 
-    ref.current!.hide();
+    refCurrent.hide();
     await fireEvent.transitionEnd(getByText("This is tooltip."));
 
     expect(queryByText("This is tooltip.")).toBeNull();

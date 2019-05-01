@@ -12,7 +12,7 @@ const HintTarget = React.forwardRef<
     | "onMouseEnter"
     | "onMouseLeave"
   >
->(({ children, ...events }, ref) => {
+>(function HintTargetCore({ children, ...events }, ref) {
   if (typeof children === "undefined" || children === null) {
     return null;
   }

@@ -8,16 +8,16 @@ function generateStoryUrl(
   kind: string,
   story: string,
   baseUrl: string = Cypress.env("BASE_URL")
-) {
+): string {
   return `${baseUrl}/?selectedKind=${encodeURIComponent(
     kind
   )}&selectedStory=${encodeURIComponent(story)}`;
 }
 
 class TestHandler {
-  private $body: JQuery<HTMLElement | Text | Comment> = {} as any; // this should be prepared
+  private $body: JQuery<HTMLElement | Text | Comment> | null = null;
 
-  public start() {
+  public start(): void {
     cy.visit(generateStoryUrl("Default", "place"));
     cy.get("#storybook-preview-iframe").then($iframe => {
       this.$body = $iframe.contents().find("body");
@@ -29,14 +29,14 @@ class TestHandler {
     });
   }
 
-  public selectPlaceOption(place: string) {
+  public selectPlaceOption(place: string): void {
     cy.contains("Knobs").click();
     cy.get(`[value="Left > Top > Right (custom fallback)"]`)
       .parent()
       .select(place);
   }
 
-  public dragAndDragTargetTo(x: number, y: number) {
+  public dragAndDragTargetTo(x: number, y: number): void {
     cy.wrap(this.$body)
       .contains("Move")
       .trigger("mousedown", "center")
@@ -46,7 +46,7 @@ class TestHandler {
     cy.wait(150); // considering animation delay
   }
 
-  public toggleHint() {
+  public toggleHint(): void {
     cy.wrap(this.$body)
       .contains("Toggle")
       .click();
