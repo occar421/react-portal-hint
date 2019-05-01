@@ -67,6 +67,13 @@ class ReactPortalHint extends React.Component<Props, State> {
   private intervalHandler: number | null = null;
 
   public componentDidMount(): void {
+    if (
+      typeof this.props.children === "undefined" ||
+      this.props.children === null
+    ) {
+      return;
+    }
+
     if (!this.targetRef.current) {
       throw new Error("Reference to the component is invalid.");
     }
