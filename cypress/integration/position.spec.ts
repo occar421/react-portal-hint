@@ -38,7 +38,7 @@ class TestHandler {
       .parent()
       .select(place, { force: true });
 
-    cy.wait(250); // considering animation delay
+    cy.wait(300); // considering animation delay
   }
 
   public dragAndDragTargetTo(x: number, y: number): void {
@@ -48,7 +48,7 @@ class TestHandler {
       .trigger("mousemove", { clientX: x, clientY: y })
       .trigger("mouseup", { force: true });
 
-    cy.wait(250); // considering animation delay
+    cy.wait(300); // considering animation delay
   }
 
   public toggleHint(): void {
