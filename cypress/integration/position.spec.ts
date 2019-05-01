@@ -15,25 +15,30 @@ function generateStoryUrl(
 }
 
 class TestHandler {
-  private $body: JQuery<HTMLElement | Text | Comment> | null = null;
+  private get $body(): JQuery<HTMLElement | Text | Comment> {
+    return new Cypress.Promise((resolve: (arg: unknown) => void) => {
+      cy.get("#storybook-preview-iframe").then($iframe => {
+        const body = $iframe.contents().find("body");
+        resolve(body);
+      });
+    });
+  }
 
   public start(): void {
     cy.visit(generateStoryUrl("Default", "place"));
-    cy.get("#storybook-preview-iframe").then($iframe => {
-      this.$body = $iframe.contents().find("body");
-      if (!this.$body) {
-        throw new Error(
-          "Failed to start due to iframe in Storybook not found."
-        );
-      }
-    });
+
+    // The playground height is too short by the pane.
+    // This change the orientation of the pane and gain the playground height
+    cy.get("button[title='Change orientation']").click();
   }
 
   public selectPlaceOption(place: string): void {
     cy.contains("Knobs").click();
     cy.get(`[value="Left > Top > Right (custom fallback)"]`)
       .parent()
-      .select(place);
+      .select(place, { force: true });
+
+    cy.wait(250); // considering animation delay
   }
 
   public dragAndDragTargetTo(x: number, y: number): void {
@@ -43,7 +48,7 @@ class TestHandler {
       .trigger("mousemove", { clientX: x, clientY: y })
       .trigger("mouseup", { force: true });
 
-    cy.wait(150); // considering animation delay
+    cy.wait(250); // considering animation delay
   }
 
   public toggleHint(): void {
@@ -225,7 +230,7 @@ context("Position", () => {
       // if enough space exists, hint is below the target
       expect(hintTop).to.be.greaterThan(targetBottom);
 
-      handler.dragAndDragTargetTo(250, 350);
+      handler.dragAndDragTargetTo(250, 500);
 
       // tslint:disable-next-line:no-shadowed-variable
       handler.collectElements().then(({ target, hint }) => {
