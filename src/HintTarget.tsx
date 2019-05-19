@@ -65,4 +65,6 @@ const HintTarget = React.forwardRef<
   );
 });
 
+HintTarget.displayName = "HintTarget";
+
 export default HintTarget;

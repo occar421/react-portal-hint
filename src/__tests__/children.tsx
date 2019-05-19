@@ -23,6 +23,7 @@ const SubForwardRefComponent = React.forwardRef<
 >(function Core({ children }, ref) {
   return <div ref={ref}>{children}</div>;
 });
+SubForwardRefComponent.displayName = "SubForwardRefComponent";
 
 const SubLazyComponent = React.lazy(() =>
   Promise.resolve({ default: SubFunctionComponent })
