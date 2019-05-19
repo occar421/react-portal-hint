@@ -30,6 +30,8 @@ class TestHandler {
     // The playground height is too short by the pane.
     // This change the orientation of the pane and gain the playground height
     cy.get("button[title='Change orientation']").click();
+
+    cy.contains("Smooth move").click();
   }
 
   public selectPlaceOption(place: string): void {
