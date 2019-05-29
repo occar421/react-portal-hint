@@ -18,7 +18,7 @@
     "test:e2e": "cypress run --env BASE_URL=http://localhost:8765"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "4.0.3",
+    "@cypress/webpack-preprocessor": "4.0.4",
     "@storybook/addon-info": "5.0.11",
     "@storybook/addon-knobs": "5.0.11",
     "@storybook/react": "5.0.11",
