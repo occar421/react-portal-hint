@@ -40,7 +40,7 @@ class TestHandler {
       .parent()
       .select(place, { force: true });
 
-    cy.wait(200); // considering animation delay
+    cy.wait(1000); // considering animation delay
   }
 
   public dragAndDragTargetTo(x: number, y: number): void {
