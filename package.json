@@ -50,7 +50,7 @@
     "rollup-plugin-typescript2": "0.21.2",
     "ts-jest": "24.0.2",
     "ts-loader": "6.0.2",
-    "typescript": "3.5.1",
+    "typescript": "3.5.3",
     "wait-on": "3.2.0"
   },
   "peerDependencies": {
