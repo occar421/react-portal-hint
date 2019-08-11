@@ -20,7 +20,7 @@ module.exports = {
       "warn",
       { allowExpressions: true, allowTypedFunctionExpressions: true }
     ],
-    "react/prop-types": "disabled"
+    "react/prop-types": 0
   },
   settings: {
     react: {
