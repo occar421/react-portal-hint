@@ -3,9 +3,26 @@
   "timezone": "Asia/Tokyo",
   "labels": ["renovate"],
   "automerge": true,
-  "patch": { "automerge": true },
-  "minor": { "automerge": true },
+  "patch": {
+    "automerge": true
+  },
+  "minor": {
+    "automerge": true
+  },
   "lockFileMaintenance": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "packageNames": [
+        "react",
+        "react-dom",
+        "react-is",
+        "@types/react",
+        "@types/react-dom",
+        "@types/react-is"
+      ],
+      "enabled": false
+    }
+  ]
 }
