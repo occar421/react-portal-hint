@@ -15,7 +15,7 @@ function generateStoryUrl(
 }
 
 class TestHandler {
-  private get $body(): JQuery<HTMLElement | Text | Comment> {
+  private get $body() {
     return new Cypress.Promise((resolve: (arg: unknown) => void) => {
       cy.get("#storybook-preview-iframe").then($iframe => {
         const body = $iframe.contents().find("body");

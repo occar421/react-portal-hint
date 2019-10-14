@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-// @ts-ignore
-import ResizeObserver, { ResizeObserverEntry } from "resize-observer-polyfill";
+import ResizeObserver from "resize-observer-polyfill";
 import { get as getBaseElement } from "./baseHelper";
 import { ActualPlace, Place } from "./models";
 
