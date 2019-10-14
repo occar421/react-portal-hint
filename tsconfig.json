@@ -8,7 +8,8 @@
     "strict": true,
     "noImplicitReturns": true,
     "types": [],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   },
   "include": ["src/**/*", "cypress/**/*"],
   "exclude": ["node_modules"]

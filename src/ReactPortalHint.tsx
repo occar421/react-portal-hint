@@ -1,6 +1,5 @@
 import * as React from "react";
-// @ts-ignore
-import ResizeObserver, { ResizeObserverEntry } from "resize-observer-polyfill";
+import ResizeObserver from "resize-observer-polyfill";
 import { set as setBaseElement } from "./baseHelper";
 import HintBody from "./HintBody";
 import HintTarget from "./HintTarget";
