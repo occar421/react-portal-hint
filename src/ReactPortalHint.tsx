@@ -130,7 +130,7 @@ class ReactPortalHint extends React.Component<Props, State> {
     );
   }
 
-  public readonly show = () => {
+  public readonly show = (): void => {
     if (!this.targetRef.current) {
       throw new Error("Reference to the component is invalid.");
     }
@@ -141,17 +141,17 @@ class ReactPortalHint extends React.Component<Props, State> {
       rect: this.targetRef.current.getBoundingClientRect() // if observer works in all situation, this is not necessary
     });
   };
-  public readonly hide = () => {
+  public readonly hide = (): void => {
     this.setState({ showsBody: false });
   };
 
-  private updateRect = () => {
+  private updateRect = (): void => {
     if (this.targetRef.current) {
       this.setState({ rect: this.targetRef.current.getBoundingClientRect() });
     }
   };
 
-  private onClick = () => {
+  private onClick = (): void => {
     if (this.props.events.includes("click")) {
       if (this.state.showsBody) {
         this.hide();
@@ -161,7 +161,7 @@ class ReactPortalHint extends React.Component<Props, State> {
     }
   };
 
-  private onDoubleClick = () => {
+  private onDoubleClick = (): void => {
     if (this.props.events.includes("double-click")) {
       if (this.state.showsBody) {
         this.hide();
@@ -171,31 +171,31 @@ class ReactPortalHint extends React.Component<Props, State> {
     }
   };
 
-  private onFocus = () => {
+  private onFocus = (): void => {
     if (this.props.events.includes("focus")) {
       this.show();
     }
   };
 
-  private onBlur = () => {
+  private onBlur = (): void => {
     if (this.props.events.includes("focus")) {
       this.hide();
     }
   };
 
-  private onMouseEnter = () => {
+  private onMouseEnter = (): void => {
     if (this.props.events.includes("mouse-hover")) {
       this.show();
     }
   };
 
-  private onMouseLeave = () => {
+  private onMouseLeave = (): void => {
     if (this.props.events.includes("mouse-hover")) {
       this.hide();
     }
   };
 
-  private onDisappeared = () => {
+  private onDisappeared = (): void => {
     this.setState({ rendersBody: false });
   };
 }
