@@ -250,7 +250,7 @@ class HintBody extends React.Component<Props, State> {
     );
   }
 
-  private onTransitionEnd = () => {
+  private onTransitionEnd = (): void => {
     if (
       this.props.usesTransition &&
       !this.props.shows &&
