@@ -45,7 +45,7 @@ class TestHandler {
       cy.get(`select[name="place"]`).then($select => $select.val() === place)
     );
 
-    cy.wait(1000);
+    cy.wait(250);
   }
 
   public dragAndDragTargetTo(x: number, y: number): void {
@@ -88,7 +88,7 @@ class TestHandler {
         })
     );
 
-    cy.wait(1000);
+    cy.wait(250);
   }
 
   public toggleHint(): void {
