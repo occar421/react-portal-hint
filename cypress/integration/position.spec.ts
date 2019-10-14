@@ -33,6 +33,8 @@ class TestHandler {
     cy.get("button[title='Change orientation']").click();
 
     cy.contains("Smooth move").click();
+
+    this.toggleHint();
   }
 
   public selectPlaceOption(place: string): void {
@@ -124,8 +126,6 @@ context("Position", () => {
   it("top", () => {
     handler.selectPlaceOption("Top");
 
-    handler.toggleHint();
-
     handler.collectElements().then(({ target, hint }) => {
       const targetTop = target.getBoundingClientRect().top;
       const hintBottom = hint.getBoundingClientRect().bottom;
@@ -136,8 +136,6 @@ context("Position", () => {
 
   it("right", () => {
     handler.selectPlaceOption("Right");
-
-    handler.toggleHint();
 
     handler.collectElements().then(({ target, hint }) => {
       const targetRight = target.getBoundingClientRect().right;
@@ -150,8 +148,6 @@ context("Position", () => {
   it("bottom", () => {
     handler.selectPlaceOption("Bottom");
 
-    handler.toggleHint();
-
     handler.collectElements().then(({ target, hint }) => {
       const targetBottom = target.getBoundingClientRect().bottom;
       const hintTop = hint.getBoundingClientRect().top;
@@ -162,8 +158,6 @@ context("Position", () => {
 
   it("left", () => {
     handler.selectPlaceOption("Left");
-
-    handler.toggleHint();
 
     handler.collectElements().then(({ target, hint }) => {
       const targetLeft = target.getBoundingClientRect().left;
@@ -177,8 +171,6 @@ context("Position", () => {
     handler.selectPlaceOption("Column");
 
     handler.dragAndDragTargetTo(250, 250);
-
-    handler.toggleHint();
 
     handler.collectElements().then(({ target, hint }) => {
       const targetTop = target.getBoundingClientRect().top;
@@ -205,8 +197,6 @@ context("Position", () => {
 
     handler.dragAndDragTargetTo(250, 250);
 
-    handler.toggleHint();
-
     handler.collectElements().then(({ target, hint }) => {
       const targetLeft = target.getBoundingClientRect().left;
       const hintRight = hint.getBoundingClientRect().right;
@@ -231,8 +221,6 @@ context("Position", () => {
     handler.selectPlaceOption("Start");
 
     handler.dragAndDragTargetTo(250, 250);
-
-    handler.toggleHint();
 
     handler.collectElements().then(({ target, hint }) => {
       const targetTop = target.getBoundingClientRect().top;
@@ -259,8 +247,6 @@ context("Position", () => {
 
     handler.dragAndDragTargetTo(250, 250);
 
-    handler.toggleHint();
-
     handler.collectElements().then(({ target, hint }) => {
       const targetBottom = target.getBoundingClientRect().bottom;
       const hintTop = hint.getBoundingClientRect().top;
@@ -285,8 +271,6 @@ context("Position", () => {
     handler.selectPlaceOption("Left > Top > Right (custom fallback)");
 
     handler.dragAndDragTargetTo(250, 250);
-
-    handler.toggleHint();
 
     handler.collectElements().then(({ target, hint }) => {
       const targetLeft = target.getBoundingClientRect().left;
