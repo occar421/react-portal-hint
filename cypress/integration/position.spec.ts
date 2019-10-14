@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 /* tslint:disable:no-implicit-dependencies */
 import * as Chai from "chai";
+import "cypress-wait-until";
 
 declare const expect: Chai.ExpectStatic;
 
@@ -36,11 +37,13 @@ class TestHandler {
 
   public selectPlaceOption(place: string): void {
     cy.contains("Knobs").click();
-    cy.get(`[value="Left > Top > Right (custom fallback)"]`)
-      .parent()
-      .select(place, { force: true });
+    cy.get(`select[name="place"]`).select(place, { force: true });
 
-    cy.wait(1000); // considering animation delay
+    cy.waitUntil(() =>
+      cy.get(`select[name="place"]`).then($select => $select.val() === place)
+    );
+
+    cy.wait(250);
   }
 
   public dragAndDragTargetTo(x: number, y: number): void {
@@ -50,7 +53,24 @@ class TestHandler {
       .trigger("mousemove", { clientX: x, clientY: y })
       .trigger("mouseup", { force: true });
 
-    cy.wait(1000); // considering animation delay
+    cy.waitUntil(() =>
+      cy
+        .wrap(this.$body)
+        .find("div.handle")
+        .then(($handle: JQuery<HTMLElement>) => {
+          const position = $handle.position();
+          const width = $handle.width() || 0;
+          const height = $handle.height() || 0;
+
+          // unknown 10 difference...
+          return (
+            position.left + width / 2 === x - 10 &&
+            position.top + height / 2 === y - 10
+          );
+        })
+    );
+
+    cy.wait(250);
   }
 
   public toggleHint(): void {
