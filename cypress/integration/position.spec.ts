@@ -47,6 +47,21 @@ class TestHandler {
   }
 
   public dragAndDragTargetTo(x: number, y: number): void {
+    let prev: { x: number; y: number } | undefined = undefined;
+
+    cy.wrap(this.$body)
+      .find("div.handle")
+      .then(($handle: JQuery<HTMLElement>) => {
+        const position = $handle.position();
+        const width = $handle.width() || 0;
+        const height = $handle.height() || 0;
+
+        prev = {
+          x: position.left + width / 2,
+          y: position.top + height / 2
+        };
+      });
+
     cy.wrap(this.$body)
       .contains("Move")
       .trigger("mousedown", "center")
@@ -62,11 +77,12 @@ class TestHandler {
           const width = $handle.width() || 0;
           const height = $handle.height() || 0;
 
-          // unknown 10 difference...
-          return (
-            position.left + width / 2 === x - 10 &&
-            position.top + height / 2 === y - 10
-          );
+          const current = {
+            x: position.left + width / 2,
+            y: position.top + height / 2
+          };
+
+          return !(prev && prev.x === current.x && prev.y === current.y);
         })
     );
 
