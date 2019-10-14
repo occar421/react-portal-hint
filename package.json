@@ -10,6 +10,7 @@
   "scripts": {
     "build": "rollup -c && node-sass ./src/ -o dist/",
     "style-watch": "node-sass ./src/ -o src/ && node-sass ./src/ -o src/ --watch",
+    "type-check": "tsc --noEmit",
     "lint": "eslint --ext .jsx,.js,.tsx,.ts src/ cypress/ stories/",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "build-storybook": "node-sass ./src/ -o src/ && build-storybook -c .storybook",

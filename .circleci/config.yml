@@ -32,6 +32,8 @@ jobs:
             - ~/.cache/Cypress
           key: v3-dependencies-{{ checksum "package.json" }}
 
+      - run: yarn type-check
+
       - run: yarn lint
 
       - run: yarn test:unit

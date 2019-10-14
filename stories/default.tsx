@@ -6,7 +6,7 @@ import Draggable from "react-draggable";
 import Hint from "../src/index";
 
 import "../src/default.css";
-import { Place } from "../src/models";
+import { ActualPlace, Place } from "../src/models";
 
 const buttonStyle: React.CSSProperties = {
   width: "100%"
@@ -232,8 +232,8 @@ body { height: 100%; width: 100%; margin: 0; }
             {
               ...knobOptions,
               "Left > Top > Right (custom fallback)": ["left", "top", "right"]
-            },
-            "top"
+            } as { [s: string]: Place | ActualPlace[] },
+            "top" as Place
           )}
           targetMoves={boolean("Consider it moves", true)}
           rendersSmoothly={boolean("Smooth move", true)}
