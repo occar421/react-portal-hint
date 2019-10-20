@@ -79,7 +79,7 @@ class ReactPortalHint extends React.Component<Props, State> {
 
     this.ro.observe(this.targetRef.current);
 
-    this.intervalHandler = setInterval(() => {
+    this.intervalHandler = window.setInterval(() => {
       if (this.props.targetMoves && this.state.rendersBody) {
         this.updateRect();
       }
