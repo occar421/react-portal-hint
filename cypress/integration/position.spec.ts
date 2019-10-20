@@ -10,9 +10,9 @@ function generateStoryUrl(
   story: string,
   baseUrl: string = Cypress.env("BASE_URL")
 ): string {
-  return `${baseUrl}/?selectedKind=${encodeURIComponent(
+  return `${baseUrl}/?path=/story/${encodeURIComponent(
     kind
-  )}&selectedStory=${encodeURIComponent(story)}`;
+  )}--${encodeURIComponent(story)}`;
 }
 
 class TestHandler {
@@ -26,7 +26,7 @@ class TestHandler {
   }
 
   public start(): void {
-    cy.visit(generateStoryUrl("Default", "place"));
+    cy.visit(generateStoryUrl("default", "place"));
 
     // The playground height is too short by the pane.
     // This change the orientation of the pane and gain the playground height
