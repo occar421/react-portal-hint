@@ -18,13 +18,19 @@ interface Props {
   content: JSX.Element | string | ((rect: ClientRect) => JSX.Element | string);
 }
 
-const initialState = {
-  rect: null as Readonly<ClientRect> | null,
+type State = Readonly<{
+  rect: Readonly<ClientRect> | null;
+  rendersBody: boolean;
+  showsBody: boolean;
+  originalPlace: Place | null;
+}>;
+
+const initialState: State = {
+  rect: null,
   rendersBody: false,
   showsBody: false,
   originalPlace: null as Place | null
 };
-type State = Readonly<typeof initialState>;
 
 const defaultProps: Partial<Props> = {
   place: "top",
