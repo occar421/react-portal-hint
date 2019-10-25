@@ -47,7 +47,7 @@
     "react": "16.8.6",
     "react-docgen-typescript-loader": "3.3.0",
     "react-dom": "16.8.6",
-    "react-draggable": "4.0.3",
+    "react-draggable": "4.1.0",
     "react-is": "16.8.6",
     "rollup": "1.25.2",
     "rollup-plugin-typescript2": "0.24.3",
