@@ -50,7 +50,7 @@
     "react-draggable": "4.1.0",
     "react-is": "16.8.6",
     "rollup": "1.26.0",
-    "rollup-plugin-typescript2": "0.24.3",
+    "rollup-plugin-typescript2": "0.25.1",
     "ts-jest": "24.1.0",
     "ts-loader": "6.2.1",
     "typescript": "3.6.4",
