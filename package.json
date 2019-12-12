@@ -33,7 +33,7 @@
     "@types/storybook__react": "4.0.2",
     "@typescript-eslint/eslint-plugin": "2.11.0",
     "@typescript-eslint/parser": "2.11.0",
-    "cypress": "3.7.0",
+    "cypress": "3.8.0",
     "cypress-wait-until": "1.6.1",
     "eslint": "6.7.2",
     "eslint-config-prettier": "6.7.0",
