@@ -54,7 +54,7 @@
     "ts-jest": "25.2.1",
     "ts-loader": "6.2.1",
     "typescript": "3.8.3",
-    "wait-on": "4.0.0"
+    "wait-on": "4.0.1"
   },
   "peerDependencies": {
     "react": ">=16.8",
