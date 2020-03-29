@@ -45,7 +45,7 @@
     "node-sass": "4.13.1",
     "prettier": "1.19.1",
     "react": "16.8.6",
-    "react-docgen-typescript-loader": "3.7.1",
+    "react-docgen-typescript-loader": "3.7.2",
     "react-dom": "16.8.6",
     "react-draggable": "4.2.0",
     "react-is": "16.8.6",
