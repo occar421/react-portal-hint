@@ -41,7 +41,7 @@
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "3.0.0",
     "http-server": "0.12.1",
-    "jest": "25.2.6",
+    "jest": "25.2.7",
     "node-sass": "4.13.1",
     "prettier": "1.19.1",
     "react": "16.8.6",
