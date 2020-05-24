@@ -52,7 +52,7 @@
     "rollup": "2.10.9",
     "rollup-plugin-typescript2": "0.27.1",
     "ts-jest": "26.0.0",
-    "ts-loader": "7.0.4",
+    "ts-loader": "7.0.5",
     "typescript": "3.9.3",
     "wait-on": "4.0.1"
   },
