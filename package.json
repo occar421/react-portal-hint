@@ -51,7 +51,7 @@
     "react-is": "16.8.6",
     "rollup": "2.11.2",
     "rollup-plugin-typescript2": "0.27.1",
-    "ts-jest": "26.0.0",
+    "ts-jest": "26.1.0",
     "ts-loader": "7.0.5",
     "typescript": "3.9.3",
     "wait-on": "4.0.1"
